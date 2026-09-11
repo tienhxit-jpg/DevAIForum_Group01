@@ -1,10 +1,12 @@
 <?php
 
-class HomeController
+require_once __DIR__ . '/../Core/BaseController.php';
+
+class HomeController extends BaseController
 {
     public function index()
     {
-        echo "Chao mung den DevAI Hub!";
+        $this->view('client/home/index');
     }
 
     public function about()
