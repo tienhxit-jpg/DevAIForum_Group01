@@ -1,3 +1,5 @@
-<?php
+<h1>Chào mừng đến DevAI Hub!</h1>
 
-echo "Trang chu DevAI Hub";
+<p>
+    Diễn đàn trao đổi về lập trình và trí tuệ nhân tạo.
+</p>

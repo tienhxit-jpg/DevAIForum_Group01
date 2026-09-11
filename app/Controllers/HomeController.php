@@ -6,7 +6,9 @@ class HomeController extends BaseController
 {
     public function index()
     {
-        $this->view('client/home/index');
+        $this->view('client/home/index', [
+            'title' => 'Trang chủ'
+        ]);
     }
 
     public function about()
