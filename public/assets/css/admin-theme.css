@@ -1,0 +1,427 @@
+/* ==========================================================================
+   DevAI Hub - Admin Panel
+   Reuses the same design tokens/palette as reddit-theme.css so the admin
+   panel feels like part of the same product, while staying a separate
+   stylesheet (no shared selectors/layout with the public forum).
+   ========================================================================== */
+
+:root {
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-full: 9999px;
+    --color-success: #10B981;
+    --color-warning: #F59E0B;
+    --color-danger: #EF4444;
+}
+
+[data-theme="dark"] {
+    --canvas: #0E1113;
+    --surface: #181C1F;
+    --surface-subtle: #22282C;
+    --surface-hover: #293035;
+    --border: #343A3F;
+    --border-subtle: #272D32;
+    --text-primary: #F2F4F5;
+    --text-secondary: #B7C1C5;
+    --text-muted: #849097;
+    --accent: #4C8CFF;
+    --accent-subtle: rgba(76, 140, 255, 0.14);
+    --brand-reddit: #2E5EEA;
+    --brand-secondary: #17C3B2;
+    --focus: #3B82F6;
+    --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.35);
+    --shadow-dropdown: 0 6px 20px rgba(0, 0, 0, 0.45);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--canvas);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+    background: none;
+}
+
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+}
+
+svg {
+    flex-shrink: 0;
+}
+
+#admin-app {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* --- Sidebar (mirrors the forum's left rail styling) --- */
+
+.admin-sidebar {
+    width: 240px;
+    flex-shrink: 0;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 20px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.admin-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 4px 10px 20px;
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--text-primary);
+}
+
+.admin-brand-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: var(--radius-md);
+    background: var(--accent);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.admin-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    font-weight: 500;
+    transition: background var(--transition-fast, 140ms ease), color var(--transition-fast, 140ms ease);
+}
+
+.admin-nav-link svg {
+    color: var(--text-muted);
+}
+
+.admin-nav-link:hover {
+    background: var(--surface-hover);
+    color: var(--text-primary);
+}
+
+.admin-nav-link.active {
+    background: var(--accent-subtle);
+    color: var(--accent);
+}
+
+.admin-nav-link.active svg {
+    color: var(--accent);
+}
+
+.admin-sidebar-footer {
+    margin-top: auto;
+    padding: 12px 10px 4px;
+    border-top: 1px solid var(--border-subtle);
+}
+
+.admin-sidebar-footer a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-muted);
+    font-size: 13px;
+    padding: 6px 2px;
+}
+
+.admin-sidebar-footer a:hover {
+    color: var(--accent);
+}
+
+/* --- Main content --- */
+
+.admin-main {
+    flex: 1;
+    padding: 28px 32px;
+    max-width: 1240px;
+}
+
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.admin-header h1 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.admin-header p {
+    margin: 4px 0 0;
+    color: var(--text-muted);
+    font-size: 13px;
+}
+
+.admin-stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.admin-stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+    box-shadow: var(--shadow-card);
+}
+
+.admin-stat-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.admin-stat-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-top: 4px;
+}
+
+.admin-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 18px;
+    margin-bottom: 18px;
+    box-shadow: var(--shadow-card);
+}
+
+.admin-panel h2 {
+    margin: 0 0 14px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.admin-chart-wrap {
+    position: relative;
+    height: 190px;
+}
+
+/* --- Toolbar / inputs (match forum's search-input look) --- */
+
+.admin-toolbar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+}
+
+.admin-input, .admin-select {
+    background: var(--surface-subtle);
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    border-radius: var(--radius-full);
+    padding: 8px 14px;
+    font-size: 13px;
+}
+
+.admin-input:focus, .admin-select:focus {
+    outline: none;
+    border-color: var(--accent);
+    background: var(--surface);
+}
+
+.admin-select {
+    border-radius: var(--radius-md);
+}
+
+/* --- Table --- */
+
+.admin-table-wrap {
+    overflow-x: auto;
+}
+
+table.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+table.admin-table th {
+    text-align: left;
+    padding: 10px 12px;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+}
+
+table.admin-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border-subtle);
+    vertical-align: top;
+    color: var(--text-primary);
+}
+
+table.admin-table tbody tr:hover {
+    background: var(--surface-subtle);
+}
+
+/* --- Buttons (mirror .btn / .btn-secondary from the forum) --- */
+
+.admin-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--surface-subtle);
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    border-radius: var(--radius-full);
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    transition: background var(--transition-fast, 140ms ease), border-color var(--transition-fast, 140ms ease);
+}
+
+.admin-btn:hover {
+    background: var(--surface-hover);
+    border-color: var(--accent);
+}
+
+.admin-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.admin-btn-danger {
+    color: var(--color-danger);
+    border-color: var(--color-danger);
+}
+
+.admin-btn-success {
+    color: var(--color-success);
+    border-color: var(--color-success);
+}
+
+.admin-btn-primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+}
+
+.admin-btn-primary:hover {
+    background: var(--brand-reddit-hover, #1E46C2);
+    border-color: var(--brand-reddit-hover, #1E46C2);
+}
+
+/* --- Badges --- */
+
+.admin-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 10px;
+    border-radius: var(--radius-full);
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.admin-badge-success { background: rgba(16,185,129,.15); color: var(--color-success); }
+.admin-badge-danger { background: rgba(239,68,68,.15); color: var(--color-danger); }
+.admin-badge-warning { background: rgba(245,158,11,.15); color: var(--color-warning); }
+.admin-badge-muted { background: var(--surface-subtle); color: var(--text-muted); }
+
+.admin-empty, .admin-loading {
+    padding: 28px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 13px;
+}
+
+.admin-pagination {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+/* --- Toasts (mirror .toast from the forum) --- */
+
+.admin-toast-container {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 1000;
+}
+
+.admin-toast {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    color: var(--text-primary);
+    padding: 10px 14px;
+    border-radius: var(--radius-md);
+    font-size: 13px;
+    min-width: 220px;
+    box-shadow: var(--shadow-dropdown);
+}
+
+.admin-toast.error { border-left-color: var(--color-danger); }
+.admin-toast.success { border-left-color: var(--color-success); }
+
+.admin-text-truncate {
+    max-width: 320px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.admin-row-icon {
+    display: inline-flex;
+    vertical-align: middle;
+    color: var(--text-muted);
+    margin: 0 2px;
+}
+
+@media (max-width: 860px) {
+    #admin-app { flex-direction: column; }
+    .admin-sidebar { width: 100%; flex-direction: row; flex-wrap: wrap; }
+    .admin-sidebar-footer { display: none; }
+    .admin-main { padding: 16px; }
+}

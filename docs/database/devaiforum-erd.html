@@ -1,0 +1,481 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><title>DevAI Hub ERD</title><style>html,body{margin:0;background:#020617}svg{display:block;width:100%;height:auto}</style></head><body><svg xmlns="http://www.w3.org/2000/svg" width="2700" height="2050" viewBox="0 0 2700 2050">
+<defs>
+  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#1e293b" stroke-width="1"/></pattern>
+  <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000" flood-opacity=".28"/></filter>
+</defs>
+<rect width="2700" height="2050" fill="#020617"/><rect width="2700" height="2050" fill="url(#grid)"/>
+<text x="70" y="78" fill="#f8fafc" font-family="Arial, sans-serif" font-size="42" font-weight="700">DEVAI HUB — SƠ ĐỒ CƠ SỞ DỮ LIỆU</text>
+<text x="70" y="120" fill="#94a3b8" font-family="Arial, sans-serif" font-size="22">PHP MVC · MariaDB 10.4+ · utf8mb4_unicode_ci · thiết kế theo đặc tả diễn đàn AI</text>
+<rect x="40" y="185" width="1480" height="800" rx="18" fill="none" stroke="#22d3ee" stroke-opacity=".42" stroke-width="2" stroke-dasharray="10 8"/>
+<rect x="62" y="170" width="243" height="30" rx="12" fill="#020617"/>
+<text x="78" y="192" fill="#22d3ee" font-family="Arial, sans-serif" font-size="17" font-weight="700">TÀI KHOẢN & RBAC</text>
+<rect x="40" y="1025" width="1480" height="390" rx="18" fill="none" stroke="#34d399" stroke-opacity=".42" stroke-width="2" stroke-dasharray="10 8"/>
+<rect x="62" y="1010" width="282" height="30" rx="12" fill="#020617"/>
+<text x="78" y="1032" fill="#34d399" font-family="Arial, sans-serif" font-size="17" font-weight="700">TƯƠNG TÁC CỘNG ĐỒNG</text>
+<rect x="40" y="1435" width="1480" height="555" rx="18" fill="none" stroke="#fb7185" stroke-opacity=".42" stroke-width="2" stroke-dasharray="10 8"/>
+<rect x="62" y="1420" width="321" height="30" rx="12" fill="#020617"/>
+<text x="78" y="1442" fill="#fb7185" font-family="Arial, sans-serif" font-size="17" font-weight="700">THÔNG BÁO & KIỂM DUYỆT</text>
+<rect x="1560" y="185" width="1080" height="1805" rx="18" fill="none" stroke="#60a5fa" stroke-opacity=".42" stroke-width="2" stroke-dasharray="10 8"/>
+<rect x="1582" y="170" width="256" height="30" rx="12" fill="#020617"/>
+<text x="1598" y="192" fill="#60a5fa" font-family="Arial, sans-serif" font-size="17" font-weight="700">NỘI DUNG DIỄN ĐÀN</text>
+<polyline points="540,361 570,507" fill="none" stroke="#22d3ee" stroke-width="3" stroke-opacity=".85" />
+<circle cx="540" cy="361.0" r="6" fill="#020617" stroke="#22d3ee" stroke-width="3"/>
+<path d="M 561 498.0 L 570 507.0 L 561 516.0" fill="none" stroke="#22d3ee" stroke-width="3"/>
+<rect x="522" y="490.0" width="96" height="28" rx="9" fill="#020617" stroke="#22d3ee" stroke-opacity=".45"/>
+<text x="570" y="511.0" text-anchor="middle" fill="#cbd5e1" font-family="Arial, sans-serif" font-size="15">1 : N</text>
+<polyline points="540,654 520,690 520,520 570,507" fill="none" stroke="#22d3ee" stroke-width="3" stroke-opacity=".85" />
+<circle cx="540" cy="654.0" r="6" fill="#020617" stroke="#22d3ee" stroke-width="3"/>
+<path d="M 561 498.0 L 570 507.0 L 561 516.0" fill="none" stroke="#22d3ee" stroke-width="3"/>
+<rect x="472" y="503" width="96" height="28" rx="9" fill="#020617" stroke="#22d3ee" stroke-opacity=".45"/>
+<text x="520" y="524" text-anchor="middle" fill="#cbd5e1" font-family="Arial, sans-serif" font-size="15">1 : N</text>
+<polyline points="540,361 900,340 900,205 1290,205 1290,230" fill="none" stroke="#22d3ee" stroke-width="3" stroke-opacity=".85" />
+<circle cx="540" cy="361.0" r="6" fill="#020617" stroke="#22d3ee" stroke-width="3"/>
+<path d="M 1281.0 221 L 1290.0 230 L 1281.0 239" fill="none" stroke="#22d3ee" stroke-width="3"/>
+<rect x="852" y="188" width="96" height="28" rx="9" fill="#020617" stroke="#22d3ee" stroke-opacity=".45"/>
+<text x="900" y="209" text-anchor="middle" fill="#cbd5e1" font-family="Arial, sans-serif" font-size="15">1 : N</text>
+<polyline points="1290,690 1290,750" fill="none" stroke="#a78bfa" stroke-width="3" stroke-opacity=".85" />
+<circle cx="1290.0" cy="690" r="6" fill="#020617" stroke="#a78bfa" stroke-width="3"/>
+<path d="M 1281.0 741 L 1290.0 750 L 1281.0 759" fill="none" stroke="#a78bfa" stroke-width="3"/>
+<rect x="1242.0" y="733" width="96" height="28" rx="9" fill="#020617" stroke="#a78bfa" stroke-opacity=".45"/>
+<text x="1290.0" y="754" text-anchor="middle" fill="#cbd5e1" font-family="Arial, sans-serif" font-size="15">1 : N</text>
+<polyline points="2060,409 2150,477" fill="none" stroke="#60a5fa" stroke-width="3" stroke-opacity=".85" />
+<circle cx="2060" cy="409.0" r="6" fill="#020617" stroke="#60a5fa" stroke-width="3"/>
+<path d="M 2141 468.0 L 2150 477.0 L 2141 486.0" fill="none" stroke="#60a5fa" stroke-width="3"/>
+<rect x="2102" y="460.0" width="96" height="28" rx="9" fill="#020617" stroke="#60a5fa" stroke-opacity=".45"/>
+<text x="2150" y="481.0" text-anchor="middle" fill="#cbd5e1" font-family="Arial, sans-serif" font-size="15">1 : N</text>
+<polyline points="1600,409 1570,420 1570,205 1830,205 1830,230" fill="none" stroke="#60a5fa" stroke-width="3" stroke-opacity=".85" />
+<circle cx="1600" cy="409.0" r="6" fill="#020617" stroke="#60a5fa" stroke-width="3"/>
+<path d="M 1821.0 221 L 1830.0 230 L 1821.0 239" fill="none" stroke="#60a5fa" stroke-width="3"/>
+<rect x="1522" y="188" width="96" height="28" rx="9" fill="#020617" stroke="#60a5fa" stroke-opacity=".45"/>
+<text x="1570" y="209" text-anchor="middle" fill="#cbd5e1" font-family="Arial, sans-serif" font-size="15">cha : con</text>
+<polyline points="1520,460 1540,470 1540,165 2380,165 2380,230" fill="none" stroke="#22d3ee" stroke-width="3" stroke-opacity=".85" />
+<circle cx="1520" cy="460.0" r="6" fill="#020617" stroke="#22d3ee" stroke-width="3"/>
+<path d="M 2371.0 221 L 2380.0 230 L 2371.0 239" fill="none" stroke="#22d3ee" stroke-width="3"/>
+<rect x="1492" y="148" width="96" height="28" rx="9" fill="#020617" stroke="#22d3ee" stroke-opacity=".45"/>
+<text x="1540" y="169" text-anchor="middle" fill="#cbd5e1" font-family="Arial, sans-serif" font-size="15">1 : N</text>
+<polyline points="2150,477 2105,500 2105,930 2630,930 2610,902" fill="none" stroke="#60a5fa" stroke-width="3" stroke-opacity=".85" />
+<circle cx="2150" cy="477.0" r="6" fill="#020617" stroke="#60a5fa" stroke-width="3"/>
+<path d="M 2601 893.0 L 2610 902.0 L 2601 911.0" fill="none" stroke="#60a5fa" stroke-width="3"/>
+<rect x="2057" y="913" width="96" height="28" rx="9" fill="#020617" stroke="#60a5fa" stroke-opacity=".45"/>
+<text x="2105" y="934" text-anchor="middle" fill="#cbd5e1" font-family="Arial, sans-serif" font-size="15">1 : N</text>
+<polyline points="2060,798 2150,902" fill="none" stroke="#60a5fa" stroke-width="3" stroke-opacity=".85" />
+<circle cx="2060" cy="798.0" r="6" fill="#020617" stroke="#60a5fa" stroke-width="3"/>
+<path d="M 2141 893.0 L 2150 902.0 L 2141 911.0" fill="none" stroke="#60a5fa" stroke-width="3"/>
+<rect x="2102" y="885.0" width="96" height="28" rx="9" fill="#020617" stroke="#60a5fa" stroke-opacity=".45"/>
+<text x="2150" y="906.0" text-anchor="middle" fill="#cbd5e1" font-family="Arial, sans-serif" font-size="15">1 : N</text>
+<polyline points="2380,724 2380,1130" fill="none" stroke="#60a5fa" stroke-width="3" stroke-opacity=".85" />
+<circle cx="2380.0" cy="724" r="6" fill="#020617" stroke="#60a5fa" stroke-width="3"/>
+<path d="M 2371.0 1121 L 2380.0 1130 L 2371.0 1139" fill="none" stroke="#60a5fa" stroke-width="3"/>
+<rect x="2332.0" y="1113" width="96" height="28" rx="9" fill="#020617" stroke="#60a5fa" stroke-opacity=".45"/>
+<text x="2380.0" y="1134" text-anchor="middle" fill="#cbd5e1" font-family="Arial, sans-serif" font-size="15">1 : N</text>
+<polyline points="2150,477 2085,700 2085,1210 2060,1202" fill="none" stroke="#60a5fa" stroke-width="3" stroke-opacity=".85" />
+<circle cx="2150" cy="477.0" r="6" fill="#020617" stroke="#60a5fa" stroke-width="3"/>
+<path d="M 2051 1193.0 L 2060 1202.0 L 2051 1211.0" fill="none" stroke="#60a5fa" stroke-width="3"/>
+<rect x="2037" y="1193" width="96" height="28" rx="9" fill="#020617" stroke="#60a5fa" stroke-opacity=".45"/>
+<text x="2085" y="1214" text-anchor="middle" fill="#cbd5e1" font-family="Arial, sans-serif" font-size="15">1 : N</text>
+<polyline points="1600,1202 1565,1230 1565,1460 1830,1460 1830,1364" fill="none" stroke="#60a5fa" stroke-width="3" stroke-opacity=".85" />
+<circle cx="1600" cy="1202.0" r="6" fill="#020617" stroke="#60a5fa" stroke-width="3"/>
+<path d="M 1821.0 1355 L 1830.0 1364 L 1821.0 1373" fill="none" stroke="#60a5fa" stroke-width="3"/>
+<rect x="1517" y="1443" width="96" height="28" rx="9" fill="#020617" stroke="#60a5fa" stroke-opacity=".45"/>
+<text x="1565" y="1464" text-anchor="middle" fill="#cbd5e1" font-family="Arial, sans-serif" font-size="15">cha : con</text>
+<polyline points="2060,1202 2095,1340 2660,1340 2660,760 2380,760 2380,724" fill="none" stroke="#fbbf24" stroke-width="3" stroke-opacity=".85" stroke-dasharray="9 7"/>
+<circle cx="2060" cy="1202.0" r="6" fill="#020617" stroke="#fbbf24" stroke-width="3"/>
+<path d="M 2371.0 715 L 2380.0 724 L 2371.0 733" fill="none" stroke="#fbbf24" stroke-width="3"/>
+<rect x="2612" y="743" width="96" height="28" rx="9" fill="#020617" stroke="#fbbf24" stroke-opacity=".45"/>
+<text x="2660" y="764" text-anchor="middle" fill="#cbd5e1" font-family="Arial, sans-serif" font-size="15">0..1 best answer</text>
+<polyline points="1060,460 1025,520 1025,1200 540,1204" fill="none" stroke="#34d399" stroke-width="3" stroke-opacity=".85" />
+<circle cx="1060" cy="460.0" r="6" fill="#020617" stroke="#34d399" stroke-width="3"/>
+<path d="M 531 1195.0 L 540 1204.0 L 531 1213.0" fill="none" stroke="#34d399" stroke-width="3"/>
+<rect x="977" y="1183" width="96" height="28" rx="9" fill="#020617" stroke="#34d399" stroke-opacity=".45"/>
+<text x="1025" y="1204" text-anchor="middle" fill="#cbd5e1" font-family="Arial, sans-serif" font-size="15">1 : N</text>
+<polyline points="1060,460 990,570 990,1280 1030,1204" fill="none" stroke="#34d399" stroke-width="3" stroke-opacity=".85" />
+<circle cx="1060" cy="460.0" r="6" fill="#020617" stroke="#34d399" stroke-width="3"/>
+<path d="M 1021 1195.0 L 1030 1204.0 L 1021 1213.0" fill="none" stroke="#34d399" stroke-width="3"/>
+<rect x="942" y="1263" width="96" height="28" rx="9" fill="#020617" stroke="#34d399" stroke-opacity=".45"/>
+<text x="990" y="1284" text-anchor="middle" fill="#cbd5e1" font-family="Arial, sans-serif" font-size="15">1 : N</text>
+<polyline points="1290,690 1290,1010 300,1010 310,1510" fill="none" stroke="#a78bfa" stroke-width="3" stroke-opacity=".85" />
+<circle cx="1290.0" cy="690" r="6" fill="#020617" stroke="#a78bfa" stroke-width="3"/>
+<path d="M 301.0 1501 L 310.0 1510 L 301.0 1519" fill="none" stroke="#a78bfa" stroke-width="3"/>
+<rect x="252" y="993" width="96" height="28" rx="9" fill="#020617" stroke="#a78bfa" stroke-opacity=".45"/>
+<text x="300" y="1014" text-anchor="middle" fill="#cbd5e1" font-family="Arial, sans-serif" font-size="15">người nhận</text>
+<polyline points="1290,690 1320,1040 800,1040 800,1510" fill="none" stroke="#fb7185" stroke-width="3" stroke-opacity=".85" />
+<circle cx="1290.0" cy="690" r="6" fill="#020617" stroke="#fb7185" stroke-width="3"/>
+<path d="M 791.0 1501 L 800.0 1510 L 791.0 1519" fill="none" stroke="#fb7185" stroke-width="3"/>
+<rect x="752" y="1023" width="96" height="28" rx="9" fill="#020617" stroke="#fb7185" stroke-opacity=".45"/>
+<text x="800" y="1044" text-anchor="middle" fill="#cbd5e1" font-family="Arial, sans-serif" font-size="15">người báo cáo</text>
+<polyline points="1290,690 1290,1510" fill="none" stroke="#fb7185" stroke-width="3" stroke-opacity=".85" />
+<circle cx="1290.0" cy="690" r="6" fill="#020617" stroke="#fb7185" stroke-width="3"/>
+<path d="M 1281.0 1501 L 1290.0 1510 L 1281.0 1519" fill="none" stroke="#fb7185" stroke-width="3"/>
+<rect x="1242.0" y="1493" width="96" height="28" rx="9" fill="#020617" stroke="#fb7185" stroke-opacity=".45"/>
+<text x="1290.0" y="1514" text-anchor="middle" fill="#cbd5e1" font-family="Arial, sans-serif" font-size="15">moderator</text>
+<polyline points="2150,477 2070,590 1510,590 1510,1070 540,1070 540,1200 540,1204" fill="none" stroke="#34d399" stroke-width="3" stroke-opacity=".85" />
+<circle cx="2150" cy="477.0" r="6" fill="#020617" stroke="#34d399" stroke-width="3"/>
+<path d="M 531 1195.0 L 540 1204.0 L 531 1213.0" fill="none" stroke="#34d399" stroke-width="3"/>
+<rect x="1462" y="1053" width="96" height="28" rx="9" fill="#020617" stroke="#34d399" stroke-opacity=".45"/>
+<text x="1510" y="1074" text-anchor="middle" fill="#cbd5e1" font-family="Arial, sans-serif" font-size="15">1 : N</text>
+<polyline points="2150,477 2040,620 1490,620 1490,1085 1030,1085 1030,1200 1030,1204" fill="none" stroke="#34d399" stroke-width="3" stroke-opacity=".85" />
+<circle cx="2150" cy="477.0" r="6" fill="#020617" stroke="#34d399" stroke-width="3"/>
+<path d="M 1021 1195.0 L 1030 1204.0 L 1021 1213.0" fill="none" stroke="#34d399" stroke-width="3"/>
+<rect x="1442" y="1068" width="96" height="28" rx="9" fill="#020617" stroke="#34d399" stroke-opacity=".45"/>
+<text x="1490" y="1089" text-anchor="middle" fill="#cbd5e1" font-family="Arial, sans-serif" font-size="15">1 : N</text>
+<polyline points="2150,477 2050,650 1470,650 1470,1810 1030,1810 1030,1689" fill="none" stroke="#fb7185" stroke-width="3" stroke-opacity=".85" stroke-dasharray="9 7"/>
+<circle cx="2150" cy="477.0" r="6" fill="#020617" stroke="#fb7185" stroke-width="3"/>
+<path d="M 1021 1680.0 L 1030 1689.0 L 1021 1698.0" fill="none" stroke="#fb7185" stroke-width="3"/>
+<rect x="1422" y="1793" width="96" height="28" rx="9" fill="#020617" stroke="#fb7185" stroke-opacity=".45"/>
+<text x="1470" y="1814" text-anchor="middle" fill="#cbd5e1" font-family="Arial, sans-serif" font-size="15">đối tượng</text>
+<g filter="url(#shadow)"><rect x="80" y="250" width="460" height="222" rx="13" fill="#0f172a" stroke="#22d3ee" stroke-width="2.4"/>
+<path d="M93,250 H527 Q540,250 540,263 V312 H80 V263 Q80,250 93,250" fill="#0f2b3a"/>
+<text x="102" y="290" fill="#22d3ee" font-family="Arial, sans-serif" font-size="22" font-weight="700">VAI TRÒ</text>
+<rect x="98" y="319" width="36" height="23" rx="6" fill="#22d3ee" fill-opacity=".16" stroke="#22d3ee" stroke-opacity=".65"/>
+<text x="116.0" y="335" text-anchor="middle" fill="#22d3ee" font-family="Arial, sans-serif" font-size="12" font-weight="700">PK</text>
+<text x="146" y="338" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">id</text>
+<text x="522" y="338" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">TINYINT UNSIGNED</text>
+<rect x="98" y="353" width="36" height="23" rx="6" fill="#22d3ee" fill-opacity=".16" stroke="#22d3ee" stroke-opacity=".65"/>
+<text x="116.0" y="369" text-anchor="middle" fill="#22d3ee" font-family="Arial, sans-serif" font-size="12" font-weight="700">UQ</text>
+<text x="146" y="372" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">name</text>
+<text x="522" y="372" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">VARCHAR(30)</text>
+<text x="100" y="406" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">display_name</text>
+<text x="522" y="406" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">VARCHAR(50)</text>
+<text x="100" y="440" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">created_at</text>
+<text x="522" y="440" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">DATETIME</text>
+</g>
+<g filter="url(#shadow)"><rect x="80" y="560" width="460" height="188" rx="13" fill="#0f172a" stroke="#22d3ee" stroke-width="2.4"/>
+<path d="M93,560 H527 Q540,560 540,573 V622 H80 V573 Q80,560 93,560" fill="#0f2b3a"/>
+<text x="102" y="600" fill="#22d3ee" font-family="Arial, sans-serif" font-size="22" font-weight="700">QUYỀN</text>
+<rect x="98" y="629" width="36" height="23" rx="6" fill="#22d3ee" fill-opacity=".16" stroke="#22d3ee" stroke-opacity=".65"/>
+<text x="116.0" y="645" text-anchor="middle" fill="#22d3ee" font-family="Arial, sans-serif" font-size="12" font-weight="700">PK</text>
+<text x="146" y="648" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">id</text>
+<text x="522" y="648" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">SMALLINT UNSIGNED</text>
+<rect x="98" y="663" width="36" height="23" rx="6" fill="#22d3ee" fill-opacity=".16" stroke="#22d3ee" stroke-opacity=".65"/>
+<text x="116.0" y="679" text-anchor="middle" fill="#22d3ee" font-family="Arial, sans-serif" font-size="12" font-weight="700">UQ</text>
+<text x="146" y="682" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">code</text>
+<text x="522" y="682" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">VARCHAR(80)</text>
+<text x="100" y="716" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">description</text>
+<text x="522" y="716" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">VARCHAR(255)</text>
+</g>
+<g filter="url(#shadow)"><rect x="570" y="430" width="460" height="154" rx="13" fill="#0f172a" stroke="#22d3ee" stroke-width="2.4"/>
+<path d="M583,430 H1017 Q1030,430 1030,443 V492 H570 V443 Q570,430 583,430" fill="#0f2b3a"/>
+<text x="592" y="470" fill="#22d3ee" font-family="Arial, sans-serif" font-size="22" font-weight="700">VAI TRÒ — QUYỀN</text>
+<rect x="588" y="499" width="72" height="23" rx="6" fill="#22d3ee" fill-opacity=".16" stroke="#22d3ee" stroke-opacity=".65"/>
+<text x="624.0" y="515" text-anchor="middle" fill="#22d3ee" font-family="Arial, sans-serif" font-size="12" font-weight="700">PK/FK</text>
+<text x="672" y="518" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">role_id</text>
+<text x="1012" y="518" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">TINYINT UNSIGNED</text>
+<rect x="588" y="533" width="72" height="23" rx="6" fill="#22d3ee" fill-opacity=".16" stroke="#22d3ee" stroke-opacity=".65"/>
+<text x="624.0" y="549" text-anchor="middle" fill="#22d3ee" font-family="Arial, sans-serif" font-size="12" font-weight="700">PK/FK</text>
+<text x="672" y="552" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">permission_id</text>
+<text x="1012" y="552" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">SMALLINT UNSIGNED</text>
+</g>
+<g filter="url(#shadow)"><rect x="1060" y="230" width="460" height="460" rx="13" fill="#0f172a" stroke="#22d3ee" stroke-width="2.4"/>
+<path d="M1073,230 H1507 Q1520,230 1520,243 V292 H1060 V243 Q1060,230 1073,230" fill="#0f2b3a"/>
+<text x="1082" y="270" fill="#22d3ee" font-family="Arial, sans-serif" font-size="22" font-weight="700">NGƯỜI DÙNG</text>
+<rect x="1078" y="299" width="36" height="23" rx="6" fill="#22d3ee" fill-opacity=".16" stroke="#22d3ee" stroke-opacity=".65"/>
+<text x="1096.0" y="315" text-anchor="middle" fill="#22d3ee" font-family="Arial, sans-serif" font-size="12" font-weight="700">PK</text>
+<text x="1126" y="318" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">id</text>
+<text x="1502" y="318" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">BIGINT UNSIGNED</text>
+<rect x="1078" y="333" width="36" height="23" rx="6" fill="#22d3ee" fill-opacity=".16" stroke="#22d3ee" stroke-opacity=".65"/>
+<text x="1096.0" y="349" text-anchor="middle" fill="#22d3ee" font-family="Arial, sans-serif" font-size="12" font-weight="700">FK</text>
+<text x="1126" y="352" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">role_id</text>
+<text x="1502" y="352" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">TINYINT UNSIGNED</text>
+<rect x="1078" y="367" width="36" height="23" rx="6" fill="#22d3ee" fill-opacity=".16" stroke="#22d3ee" stroke-opacity=".65"/>
+<text x="1096.0" y="383" text-anchor="middle" fill="#22d3ee" font-family="Arial, sans-serif" font-size="12" font-weight="700">UQ</text>
+<text x="1126" y="386" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">username</text>
+<text x="1502" y="386" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">VARCHAR(50)</text>
+<rect x="1078" y="401" width="36" height="23" rx="6" fill="#22d3ee" fill-opacity=".16" stroke="#22d3ee" stroke-opacity=".65"/>
+<text x="1096.0" y="417" text-anchor="middle" fill="#22d3ee" font-family="Arial, sans-serif" font-size="12" font-weight="700">UQ</text>
+<text x="1126" y="420" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">email</text>
+<text x="1502" y="420" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">VARCHAR(255)</text>
+<text x="1080" y="454" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">password_hash</text>
+<text x="1502" y="454" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">VARCHAR(255)</text>
+<text x="1080" y="488" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">display_name</text>
+<text x="1502" y="488" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">VARCHAR(100)</text>
+<text x="1080" y="522" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">bio / avatar_path</text>
+<text x="1502" y="522" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">TEXT / VARCHAR</text>
+<text x="1080" y="556" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">reputation</text>
+<text x="1502" y="556" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">INT DEFAULT 0</text>
+<text x="1080" y="590" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">status</text>
+<text x="1502" y="590" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">active|banned|inactive</text>
+<text x="1080" y="624" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">banned_until</text>
+<text x="1502" y="624" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">DATETIME NULL</text>
+<text x="1080" y="658" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">created_at / updated_at</text>
+<text x="1502" y="658" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">DATETIME</text>
+</g>
+<g filter="url(#shadow)"><rect x="1060" y="750" width="460" height="256" rx="13" fill="#0f172a" stroke="#a78bfa" stroke-width="2.4"/>
+<path d="M1073,750 H1507 Q1520,750 1520,763 V812 H1060 V763 Q1060,750 1073,750" fill="#2e1f52"/>
+<text x="1082" y="790" fill="#a78bfa" font-family="Arial, sans-serif" font-size="22" font-weight="700">ĐẶT LẠI MẬT KHẨU</text>
+<rect x="1078" y="819" width="36" height="23" rx="6" fill="#a78bfa" fill-opacity=".16" stroke="#a78bfa" stroke-opacity=".65"/>
+<text x="1096.0" y="835" text-anchor="middle" fill="#a78bfa" font-family="Arial, sans-serif" font-size="12" font-weight="700">PK</text>
+<text x="1126" y="838" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">id</text>
+<text x="1502" y="838" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">BIGINT UNSIGNED</text>
+<rect x="1078" y="853" width="36" height="23" rx="6" fill="#a78bfa" fill-opacity=".16" stroke="#a78bfa" stroke-opacity=".65"/>
+<text x="1096.0" y="869" text-anchor="middle" fill="#a78bfa" font-family="Arial, sans-serif" font-size="12" font-weight="700">FK</text>
+<text x="1126" y="872" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">user_id</text>
+<text x="1502" y="872" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">BIGINT UNSIGNED</text>
+<rect x="1078" y="887" width="36" height="23" rx="6" fill="#a78bfa" fill-opacity=".16" stroke="#a78bfa" stroke-opacity=".65"/>
+<text x="1096.0" y="903" text-anchor="middle" fill="#a78bfa" font-family="Arial, sans-serif" font-size="12" font-weight="700">UQ</text>
+<text x="1126" y="906" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">token_hash</text>
+<text x="1502" y="906" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">CHAR(64)</text>
+<text x="1080" y="940" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">expires_at / used_at</text>
+<text x="1502" y="940" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">DATETIME</text>
+<text x="1080" y="974" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">created_at</text>
+<text x="1502" y="974" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">DATETIME</text>
+</g>
+<g filter="url(#shadow)"><rect x="1600" y="230" width="460" height="358" rx="13" fill="#0f172a" stroke="#60a5fa" stroke-width="2.4"/>
+<path d="M1613,230 H2047 Q2060,230 2060,243 V292 H1600 V243 Q1600,230 1613,230" fill="#172554"/>
+<text x="1622" y="270" fill="#60a5fa" font-family="Arial, sans-serif" font-size="22" font-weight="700">CHUYÊN MỤC</text>
+<rect x="1618" y="299" width="36" height="23" rx="6" fill="#60a5fa" fill-opacity=".16" stroke="#60a5fa" stroke-opacity=".65"/>
+<text x="1636.0" y="315" text-anchor="middle" fill="#60a5fa" font-family="Arial, sans-serif" font-size="12" font-weight="700">PK</text>
+<text x="1666" y="318" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">id</text>
+<text x="2042" y="318" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">INT UNSIGNED</text>
+<rect x="1618" y="333" width="36" height="23" rx="6" fill="#60a5fa" fill-opacity=".16" stroke="#60a5fa" stroke-opacity=".65"/>
+<text x="1636.0" y="349" text-anchor="middle" fill="#60a5fa" font-family="Arial, sans-serif" font-size="12" font-weight="700">FK</text>
+<text x="1666" y="352" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">parent_id</text>
+<text x="2042" y="352" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">INT UNSIGNED NULL</text>
+<rect x="1618" y="367" width="36" height="23" rx="6" fill="#60a5fa" fill-opacity=".16" stroke="#60a5fa" stroke-opacity=".65"/>
+<text x="1636.0" y="383" text-anchor="middle" fill="#60a5fa" font-family="Arial, sans-serif" font-size="12" font-weight="700">UQ</text>
+<text x="1666" y="386" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">slug</text>
+<text x="2042" y="386" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">VARCHAR(120)</text>
+<text x="1620" y="420" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">name</text>
+<text x="2042" y="420" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">VARCHAR(120)</text>
+<text x="1620" y="454" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">description</text>
+<text x="2042" y="454" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">TEXT</text>
+<text x="1620" y="488" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">sort_order</text>
+<text x="2042" y="488" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">INT</text>
+<text x="1620" y="522" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">is_active</text>
+<text x="2042" y="522" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">BOOLEAN</text>
+<text x="1620" y="556" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">created_at / updated_at</text>
+<text x="2042" y="556" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">DATETIME</text>
+</g>
+<g filter="url(#shadow)"><rect x="2150" y="230" width="460" height="494" rx="13" fill="#0f172a" stroke="#60a5fa" stroke-width="2.4"/>
+<path d="M2163,230 H2597 Q2610,230 2610,243 V292 H2150 V243 Q2150,230 2163,230" fill="#172554"/>
+<text x="2172" y="270" fill="#60a5fa" font-family="Arial, sans-serif" font-size="22" font-weight="700">BÀI VIẾT / CÂU HỎI</text>
+<rect x="2168" y="299" width="36" height="23" rx="6" fill="#60a5fa" fill-opacity=".16" stroke="#60a5fa" stroke-opacity=".65"/>
+<text x="2186.0" y="315" text-anchor="middle" fill="#60a5fa" font-family="Arial, sans-serif" font-size="12" font-weight="700">PK</text>
+<text x="2216" y="318" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">id</text>
+<text x="2592" y="318" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">BIGINT UNSIGNED</text>
+<rect x="2168" y="333" width="36" height="23" rx="6" fill="#60a5fa" fill-opacity=".16" stroke="#60a5fa" stroke-opacity=".65"/>
+<text x="2186.0" y="349" text-anchor="middle" fill="#60a5fa" font-family="Arial, sans-serif" font-size="12" font-weight="700">FK</text>
+<text x="2216" y="352" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">author_id</text>
+<text x="2592" y="352" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">BIGINT UNSIGNED</text>
+<rect x="2168" y="367" width="36" height="23" rx="6" fill="#60a5fa" fill-opacity=".16" stroke="#60a5fa" stroke-opacity=".65"/>
+<text x="2186.0" y="383" text-anchor="middle" fill="#60a5fa" font-family="Arial, sans-serif" font-size="12" font-weight="700">FK</text>
+<text x="2216" y="386" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">category_id</text>
+<text x="2592" y="386" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">INT UNSIGNED</text>
+<rect x="2168" y="401" width="36" height="23" rx="6" fill="#60a5fa" fill-opacity=".16" stroke="#60a5fa" stroke-opacity=".65"/>
+<text x="2186.0" y="417" text-anchor="middle" fill="#60a5fa" font-family="Arial, sans-serif" font-size="12" font-weight="700">FK</text>
+<text x="2216" y="420" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">best_answer_id</text>
+<text x="2592" y="420" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">BIGINT NULL</text>
+<rect x="2168" y="435" width="36" height="23" rx="6" fill="#60a5fa" fill-opacity=".16" stroke="#60a5fa" stroke-opacity=".65"/>
+<text x="2186.0" y="451" text-anchor="middle" fill="#60a5fa" font-family="Arial, sans-serif" font-size="12" font-weight="700">UQ</text>
+<text x="2216" y="454" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">slug</text>
+<text x="2592" y="454" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">VARCHAR(180)</text>
+<text x="2170" y="488" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">title</text>
+<text x="2592" y="488" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">VARCHAR(255)</text>
+<text x="2170" y="522" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">content_html</text>
+<text x="2592" y="522" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">LONGTEXT</text>
+<text x="2170" y="556" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">post_type</text>
+<text x="2592" y="556" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">discussion|question|...</text>
+<text x="2170" y="590" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">status</text>
+<text x="2592" y="590" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">published|hidden|deleted</text>
+<text x="2170" y="624" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">is_pinned / is_locked</text>
+<text x="2592" y="624" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">BOOLEAN</text>
+<text x="2170" y="658" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">view_count</text>
+<text x="2592" y="658" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">INT UNSIGNED</text>
+<text x="2170" y="692" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">created_at / updated_at</text>
+<text x="2592" y="692" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">DATETIME</text>
+</g>
+<g filter="url(#shadow)"><rect x="1600" y="670" width="460" height="256" rx="13" fill="#0f172a" stroke="#60a5fa" stroke-width="2.4"/>
+<path d="M1613,670 H2047 Q2060,670 2060,683 V732 H1600 V683 Q1600,670 1613,670" fill="#172554"/>
+<text x="1622" y="710" fill="#60a5fa" font-family="Arial, sans-serif" font-size="22" font-weight="700">THẺ CÔNG NGHỆ</text>
+<rect x="1618" y="739" width="36" height="23" rx="6" fill="#60a5fa" fill-opacity=".16" stroke="#60a5fa" stroke-opacity=".65"/>
+<text x="1636.0" y="755" text-anchor="middle" fill="#60a5fa" font-family="Arial, sans-serif" font-size="12" font-weight="700">PK</text>
+<text x="1666" y="758" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">id</text>
+<text x="2042" y="758" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">INT UNSIGNED</text>
+<rect x="1618" y="773" width="36" height="23" rx="6" fill="#60a5fa" fill-opacity=".16" stroke="#60a5fa" stroke-opacity=".65"/>
+<text x="1636.0" y="789" text-anchor="middle" fill="#60a5fa" font-family="Arial, sans-serif" font-size="12" font-weight="700">UQ</text>
+<text x="1666" y="792" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">slug</text>
+<text x="2042" y="792" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">VARCHAR(80)</text>
+<rect x="1618" y="807" width="36" height="23" rx="6" fill="#60a5fa" fill-opacity=".16" stroke="#60a5fa" stroke-opacity=".65"/>
+<text x="1636.0" y="823" text-anchor="middle" fill="#60a5fa" font-family="Arial, sans-serif" font-size="12" font-weight="700">UQ</text>
+<text x="1666" y="826" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">name</text>
+<text x="2042" y="826" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">VARCHAR(80)</text>
+<text x="1620" y="860" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">description</text>
+<text x="2042" y="860" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">VARCHAR(255)</text>
+<text x="1620" y="894" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">created_at</text>
+<text x="2042" y="894" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">DATETIME</text>
+</g>
+<g filter="url(#shadow)"><rect x="2150" y="825" width="460" height="154" rx="13" fill="#0f172a" stroke="#60a5fa" stroke-width="2.4"/>
+<path d="M2163,825 H2597 Q2610,825 2610,838 V887 H2150 V838 Q2150,825 2163,825" fill="#172554"/>
+<text x="2172" y="865" fill="#60a5fa" font-family="Arial, sans-serif" font-size="22" font-weight="700">BÀI VIẾT — THẺ</text>
+<rect x="2168" y="894" width="72" height="23" rx="6" fill="#60a5fa" fill-opacity=".16" stroke="#60a5fa" stroke-opacity=".65"/>
+<text x="2204.0" y="910" text-anchor="middle" fill="#60a5fa" font-family="Arial, sans-serif" font-size="12" font-weight="700">PK/FK</text>
+<text x="2252" y="913" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">post_id</text>
+<text x="2592" y="913" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">BIGINT UNSIGNED</text>
+<rect x="2168" y="928" width="72" height="23" rx="6" fill="#60a5fa" fill-opacity=".16" stroke="#60a5fa" stroke-opacity=".65"/>
+<text x="2204.0" y="944" text-anchor="middle" fill="#60a5fa" font-family="Arial, sans-serif" font-size="12" font-weight="700">PK/FK</text>
+<text x="2252" y="947" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">tag_id</text>
+<text x="2592" y="947" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">INT UNSIGNED</text>
+</g>
+<g filter="url(#shadow)"><rect x="1600" y="1040" width="460" height="324" rx="13" fill="#0f172a" stroke="#60a5fa" stroke-width="2.4"/>
+<path d="M1613,1040 H2047 Q2060,1040 2060,1053 V1102 H1600 V1053 Q1600,1040 1613,1040" fill="#172554"/>
+<text x="1622" y="1080" fill="#60a5fa" font-family="Arial, sans-serif" font-size="22" font-weight="700">BÌNH LUẬN / TRẢ LỜI</text>
+<rect x="1618" y="1109" width="36" height="23" rx="6" fill="#60a5fa" fill-opacity=".16" stroke="#60a5fa" stroke-opacity=".65"/>
+<text x="1636.0" y="1125" text-anchor="middle" fill="#60a5fa" font-family="Arial, sans-serif" font-size="12" font-weight="700">PK</text>
+<text x="1666" y="1128" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">id</text>
+<text x="2042" y="1128" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">BIGINT UNSIGNED</text>
+<rect x="1618" y="1143" width="36" height="23" rx="6" fill="#60a5fa" fill-opacity=".16" stroke="#60a5fa" stroke-opacity=".65"/>
+<text x="1636.0" y="1159" text-anchor="middle" fill="#60a5fa" font-family="Arial, sans-serif" font-size="12" font-weight="700">FK</text>
+<text x="1666" y="1162" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">post_id</text>
+<text x="2042" y="1162" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">BIGINT UNSIGNED</text>
+<rect x="1618" y="1177" width="36" height="23" rx="6" fill="#60a5fa" fill-opacity=".16" stroke="#60a5fa" stroke-opacity=".65"/>
+<text x="1636.0" y="1193" text-anchor="middle" fill="#60a5fa" font-family="Arial, sans-serif" font-size="12" font-weight="700">FK</text>
+<text x="1666" y="1196" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">author_id</text>
+<text x="2042" y="1196" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">BIGINT UNSIGNED</text>
+<rect x="1618" y="1211" width="36" height="23" rx="6" fill="#60a5fa" fill-opacity=".16" stroke="#60a5fa" stroke-opacity=".65"/>
+<text x="1636.0" y="1227" text-anchor="middle" fill="#60a5fa" font-family="Arial, sans-serif" font-size="12" font-weight="700">FK</text>
+<text x="1666" y="1230" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">parent_id</text>
+<text x="2042" y="1230" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">BIGINT NULL</text>
+<text x="1620" y="1264" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">content_html</text>
+<text x="2042" y="1264" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">LONGTEXT</text>
+<text x="1620" y="1298" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">status</text>
+<text x="2042" y="1298" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">visible|hidden|deleted</text>
+<text x="1620" y="1332" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">created_at / updated_at</text>
+<text x="2042" y="1332" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">DATETIME</text>
+</g>
+<g filter="url(#shadow)"><rect x="2150" y="1130" width="460" height="290" rx="13" fill="#0f172a" stroke="#60a5fa" stroke-width="2.4"/>
+<path d="M2163,1130 H2597 Q2610,1130 2610,1143 V1192 H2150 V1143 Q2150,1130 2163,1130" fill="#172554"/>
+<text x="2172" y="1170" fill="#60a5fa" font-family="Arial, sans-serif" font-size="22" font-weight="700">ẢNH BÀI VIẾT</text>
+<rect x="2168" y="1199" width="36" height="23" rx="6" fill="#60a5fa" fill-opacity=".16" stroke="#60a5fa" stroke-opacity=".65"/>
+<text x="2186.0" y="1215" text-anchor="middle" fill="#60a5fa" font-family="Arial, sans-serif" font-size="12" font-weight="700">PK</text>
+<text x="2216" y="1218" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">id</text>
+<text x="2592" y="1218" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">BIGINT UNSIGNED</text>
+<rect x="2168" y="1233" width="36" height="23" rx="6" fill="#60a5fa" fill-opacity=".16" stroke="#60a5fa" stroke-opacity=".65"/>
+<text x="2186.0" y="1249" text-anchor="middle" fill="#60a5fa" font-family="Arial, sans-serif" font-size="12" font-weight="700">FK</text>
+<text x="2216" y="1252" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">post_id</text>
+<text x="2592" y="1252" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">BIGINT UNSIGNED</text>
+<text x="2170" y="1286" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">file_path</text>
+<text x="2592" y="1286" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">VARCHAR(500)</text>
+<text x="2170" y="1320" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">mime_type / file_size</text>
+<text x="2592" y="1320" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">VARCHAR / INT</text>
+<text x="2170" y="1354" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">sort_order</text>
+<text x="2592" y="1354" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">SMALLINT</text>
+<text x="2170" y="1388" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">created_at</text>
+<text x="2592" y="1388" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">DATETIME</text>
+</g>
+<g filter="url(#shadow)"><rect x="80" y="1110" width="460" height="188" rx="13" fill="#0f172a" stroke="#34d399" stroke-width="2.4"/>
+<path d="M93,1110 H527 Q540,1110 540,1123 V1172 H80 V1123 Q80,1110 93,1110" fill="#143329"/>
+<text x="102" y="1150" fill="#34d399" font-family="Arial, sans-serif" font-size="22" font-weight="700">LƯỢT THÍCH</text>
+<rect x="98" y="1179" width="72" height="23" rx="6" fill="#34d399" fill-opacity=".16" stroke="#34d399" stroke-opacity=".65"/>
+<text x="134.0" y="1195" text-anchor="middle" fill="#34d399" font-family="Arial, sans-serif" font-size="12" font-weight="700">PK/FK</text>
+<text x="182" y="1198" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">user_id</text>
+<text x="522" y="1198" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">BIGINT UNSIGNED</text>
+<rect x="98" y="1213" width="72" height="23" rx="6" fill="#34d399" fill-opacity=".16" stroke="#34d399" stroke-opacity=".65"/>
+<text x="134.0" y="1229" text-anchor="middle" fill="#34d399" font-family="Arial, sans-serif" font-size="12" font-weight="700">PK/FK</text>
+<text x="182" y="1232" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">post_id</text>
+<text x="522" y="1232" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">BIGINT UNSIGNED</text>
+<text x="100" y="1266" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">created_at</text>
+<text x="522" y="1266" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">DATETIME</text>
+</g>
+<g filter="url(#shadow)"><rect x="570" y="1110" width="460" height="188" rx="13" fill="#0f172a" stroke="#34d399" stroke-width="2.4"/>
+<path d="M583,1110 H1017 Q1030,1110 1030,1123 V1172 H570 V1123 Q570,1110 583,1110" fill="#143329"/>
+<text x="592" y="1150" fill="#34d399" font-family="Arial, sans-serif" font-size="22" font-weight="700">BÀI ĐÃ LƯU</text>
+<rect x="588" y="1179" width="72" height="23" rx="6" fill="#34d399" fill-opacity=".16" stroke="#34d399" stroke-opacity=".65"/>
+<text x="624.0" y="1195" text-anchor="middle" fill="#34d399" font-family="Arial, sans-serif" font-size="12" font-weight="700">PK/FK</text>
+<text x="672" y="1198" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">user_id</text>
+<text x="1012" y="1198" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">BIGINT UNSIGNED</text>
+<rect x="588" y="1213" width="72" height="23" rx="6" fill="#34d399" fill-opacity=".16" stroke="#34d399" stroke-opacity=".65"/>
+<text x="624.0" y="1229" text-anchor="middle" fill="#34d399" font-family="Arial, sans-serif" font-size="12" font-weight="700">PK/FK</text>
+<text x="672" y="1232" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">post_id</text>
+<text x="1012" y="1232" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">BIGINT UNSIGNED</text>
+<text x="590" y="1266" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">created_at</text>
+<text x="1012" y="1266" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">DATETIME</text>
+</g>
+<g filter="url(#shadow)"><rect x="80" y="1510" width="460" height="324" rx="13" fill="#0f172a" stroke="#a78bfa" stroke-width="2.4"/>
+<path d="M93,1510 H527 Q540,1510 540,1523 V1572 H80 V1523 Q80,1510 93,1510" fill="#2e1f52"/>
+<text x="102" y="1550" fill="#a78bfa" font-family="Arial, sans-serif" font-size="22" font-weight="700">THÔNG BÁO</text>
+<rect x="98" y="1579" width="36" height="23" rx="6" fill="#a78bfa" fill-opacity=".16" stroke="#a78bfa" stroke-opacity=".65"/>
+<text x="116.0" y="1595" text-anchor="middle" fill="#a78bfa" font-family="Arial, sans-serif" font-size="12" font-weight="700">PK</text>
+<text x="146" y="1598" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">id</text>
+<text x="522" y="1598" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">BIGINT UNSIGNED</text>
+<rect x="98" y="1613" width="36" height="23" rx="6" fill="#a78bfa" fill-opacity=".16" stroke="#a78bfa" stroke-opacity=".65"/>
+<text x="116.0" y="1629" text-anchor="middle" fill="#a78bfa" font-family="Arial, sans-serif" font-size="12" font-weight="700">FK</text>
+<text x="146" y="1632" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">user_id / actor_id</text>
+<text x="522" y="1632" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">BIGINT UNSIGNED</text>
+<rect x="98" y="1647" width="36" height="23" rx="6" fill="#a78bfa" fill-opacity=".16" stroke="#a78bfa" stroke-opacity=".65"/>
+<text x="116.0" y="1663" text-anchor="middle" fill="#a78bfa" font-family="Arial, sans-serif" font-size="12" font-weight="700">FK</text>
+<text x="146" y="1666" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">post_id / comment_id</text>
+<text x="522" y="1666" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">BIGINT NULL</text>
+<text x="100" y="1700" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">type</text>
+<text x="522" y="1700" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">like|comment|best_answer</text>
+<text x="100" y="1734" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">message</text>
+<text x="522" y="1734" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">VARCHAR(255)</text>
+<text x="100" y="1768" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">is_read / read_at</text>
+<text x="522" y="1768" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">BOOLEAN / DATETIME</text>
+<text x="100" y="1802" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">created_at</text>
+<text x="522" y="1802" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">DATETIME</text>
+</g>
+<g filter="url(#shadow)"><rect x="570" y="1510" width="460" height="358" rx="13" fill="#0f172a" stroke="#fb7185" stroke-width="2.4"/>
+<path d="M583,1510 H1017 Q1030,1510 1030,1523 V1572 H570 V1523 Q570,1510 583,1510" fill="#3b1d2a"/>
+<text x="592" y="1550" fill="#fb7185" font-family="Arial, sans-serif" font-size="22" font-weight="700">BÁO CÁO VI PHẠM</text>
+<rect x="588" y="1579" width="36" height="23" rx="6" fill="#fb7185" fill-opacity=".16" stroke="#fb7185" stroke-opacity=".65"/>
+<text x="606.0" y="1595" text-anchor="middle" fill="#fb7185" font-family="Arial, sans-serif" font-size="12" font-weight="700">PK</text>
+<text x="636" y="1598" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">id</text>
+<text x="1012" y="1598" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">BIGINT UNSIGNED</text>
+<rect x="588" y="1613" width="36" height="23" rx="6" fill="#fb7185" fill-opacity=".16" stroke="#fb7185" stroke-opacity=".65"/>
+<text x="606.0" y="1629" text-anchor="middle" fill="#fb7185" font-family="Arial, sans-serif" font-size="12" font-weight="700">FK</text>
+<text x="636" y="1632" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">reporter_id</text>
+<text x="1012" y="1632" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">BIGINT UNSIGNED</text>
+<rect x="588" y="1647" width="36" height="23" rx="6" fill="#fb7185" fill-opacity=".16" stroke="#fb7185" stroke-opacity=".65"/>
+<text x="606.0" y="1663" text-anchor="middle" fill="#fb7185" font-family="Arial, sans-serif" font-size="12" font-weight="700">FK</text>
+<text x="636" y="1666" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">post_id XOR comment_id</text>
+<text x="1012" y="1666" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">BIGINT NULL</text>
+<rect x="588" y="1681" width="36" height="23" rx="6" fill="#fb7185" fill-opacity=".16" stroke="#fb7185" stroke-opacity=".65"/>
+<text x="606.0" y="1697" text-anchor="middle" fill="#fb7185" font-family="Arial, sans-serif" font-size="12" font-weight="700">FK</text>
+<text x="636" y="1700" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">handled_by</text>
+<text x="1012" y="1700" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">BIGINT NULL</text>
+<text x="590" y="1734" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">reason / details</text>
+<text x="1012" y="1734" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">VARCHAR / TEXT</text>
+<text x="590" y="1768" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">status</text>
+<text x="1012" y="1768" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">pending|resolved|rejected</text>
+<text x="590" y="1802" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">resolution_note</text>
+<text x="1012" y="1802" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">TEXT</text>
+<text x="590" y="1836" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">created_at / handled_at</text>
+<text x="1012" y="1836" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">DATETIME</text>
+</g>
+<g filter="url(#shadow)"><rect x="1060" y="1510" width="460" height="290" rx="13" fill="#0f172a" stroke="#fb7185" stroke-width="2.4"/>
+<path d="M1073,1510 H1507 Q1520,1510 1520,1523 V1572 H1060 V1523 Q1060,1510 1073,1510" fill="#3b1d2a"/>
+<text x="1082" y="1550" fill="#fb7185" font-family="Arial, sans-serif" font-size="22" font-weight="700">NHẬT KÝ KIỂM DUYỆT</text>
+<rect x="1078" y="1579" width="36" height="23" rx="6" fill="#fb7185" fill-opacity=".16" stroke="#fb7185" stroke-opacity=".65"/>
+<text x="1096.0" y="1595" text-anchor="middle" fill="#fb7185" font-family="Arial, sans-serif" font-size="12" font-weight="700">PK</text>
+<text x="1126" y="1598" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">id</text>
+<text x="1502" y="1598" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">BIGINT UNSIGNED</text>
+<rect x="1078" y="1613" width="36" height="23" rx="6" fill="#fb7185" fill-opacity=".16" stroke="#fb7185" stroke-opacity=".65"/>
+<text x="1096.0" y="1629" text-anchor="middle" fill="#fb7185" font-family="Arial, sans-serif" font-size="12" font-weight="700">FK</text>
+<text x="1126" y="1632" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">moderator_id</text>
+<text x="1502" y="1632" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">BIGINT UNSIGNED</text>
+<rect x="1078" y="1647" width="36" height="23" rx="6" fill="#fb7185" fill-opacity=".16" stroke="#fb7185" stroke-opacity=".65"/>
+<text x="1096.0" y="1663" text-anchor="middle" fill="#fb7185" font-family="Arial, sans-serif" font-size="12" font-weight="700">FK</text>
+<text x="1126" y="1666" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">post_id / comment_id / user_id</text>
+<text x="1502" y="1666" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">BIGINT NULL</text>
+<text x="1080" y="1700" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">action</text>
+<text x="1502" y="1700" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">pin|lock|hide|ban|...</text>
+<text x="1080" y="1734" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">reason</text>
+<text x="1502" y="1734" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">TEXT</text>
+<text x="1080" y="1768" fill="#e2e8f0" font-family="Consolas, monospace" font-size="17">created_at</text>
+<text x="1502" y="1768" text-anchor="end" fill="#94a3b8" font-family="Consolas, monospace" font-size="14">DATETIME</text>
+</g>
+<rect x="1600" y="1780" width="1000" height="165" rx="14" fill="#0f172a" stroke="#334155" stroke-width="2"/>
+<text x="1630" y="1820" fill="#f8fafc" font-family="Arial, sans-serif" font-size="20" font-weight="700">KÝ HIỆU & RÀNG BUỘC CHÍNH</text>
+<text x="1630" y="1860" fill="#a78bfa" font-family="Consolas, monospace" font-size="16" font-weight="700">PK</text>
+<text x="1715" y="1860" fill="#cbd5e1" font-family="Arial, sans-serif" font-size="15">Khóa chính</text>
+<text x="1945" y="1860" fill="#a78bfa" font-family="Consolas, monospace" font-size="16" font-weight="700">FK</text>
+<text x="2030" y="1860" fill="#cbd5e1" font-family="Arial, sans-serif" font-size="15">Khóa ngoại</text>
+<text x="2260" y="1860" fill="#a78bfa" font-family="Consolas, monospace" font-size="16" font-weight="700">UQ</text>
+<text x="2345" y="1860" fill="#cbd5e1" font-family="Arial, sans-serif" font-size="15">Duy nhất</text>
+<text x="1630" y="1908" fill="#a78bfa" font-family="Consolas, monospace" font-size="16" font-weight="700">1 : N</text>
+<text x="1715" y="1908" fill="#cbd5e1" font-family="Arial, sans-serif" font-size="15">Quan hệ một–nhiều</text>
+<text x="1945" y="1908" fill="#a78bfa" font-family="Consolas, monospace" font-size="16" font-weight="700">XOR</text>
+<text x="2030" y="1908" fill="#cbd5e1" font-family="Arial, sans-serif" font-size="15">Chỉ post hoặc comment</text>
+<text x="2260" y="1908" fill="#a78bfa" font-family="Consolas, monospace" font-size="16" font-weight="700">Nét đứt</text>
+<text x="2345" y="1908" fill="#cbd5e1" font-family="Arial, sans-serif" font-size="15">Quan hệ tùy chọn / nghiệp vụ</text>
+<text x="70" y="2020" fill="#64748b" font-family="Arial, sans-serif" font-size="16">Thiết kế logic đề xuất · Guest không lưu trong bảng roles · nội dung xóa mềm qua status · ảnh tối đa 2 MB được kiểm tra ở backend</text>
+</svg></body></html>
