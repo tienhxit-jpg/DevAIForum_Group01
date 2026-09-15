@@ -73,9 +73,9 @@ Không commit mật khẩu thật vào repository.
 
 ## Nội dung khởi tạo
 
-- 16 bảng nghiệp vụ
+- 17 bảng nghiệp vụ
 - 3 vai trò: Member, Moderator và Admin
-- 17 quyền RBAC
+- 18 quyền RBAC
 - 4 chuyên mục chính theo tài liệu yêu cầu
 - 12 thẻ công nghệ mẫu
 

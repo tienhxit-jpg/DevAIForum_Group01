@@ -1,0 +1,14 @@
+# Environment
+.env
+
+# Dependencies
+node_modules/
+vendor/
+
+# Uploads (runtime user content)
+public/uploads/*
+!public/uploads/.htaccess
+
+# OS / editor noise
+.DS_Store
+Thumbs.db

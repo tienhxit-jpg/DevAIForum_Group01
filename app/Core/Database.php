@@ -43,4 +43,9 @@ final class Database
 
         return self::$connection;
     }
+
+    public static function setConnection(?PDO $connection): void
+    {
+        self::$connection = $connection;
+    }
 }

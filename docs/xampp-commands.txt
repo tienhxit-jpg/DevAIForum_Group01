@@ -1,0 +1,22 @@
+# Kiểm tra phiên bản XAMPP
+C:/xampp/php/php.exe -v
+C:/xampp/mysql/bin/mysql.exe --version
+
+# Tạo schema + seed + mock data
+C:/xampp/mysql/bin/mysql.exe -u root < database/forum_db.sql
+C:/xampp/mysql/bin/mysql.exe -u root < database/seed.sql
+C:/xampp/mysql/bin/mysql.exe -u root < database/mock_data.sql
+
+# Chạy toàn bộ kiểm thử
+C:/xampp/php/php.exe tests/run.php
+C:/xampp/php/php.exe tests/routes.php
+C:/xampp/php/php.exe tests/integration.php
+C:/xampp/php/php.exe tests/http-smoke.php
+
+# Chạy server thử nghiệm nếu không dùng Apache
+C:/xampp/php/php.exe -S 127.0.0.1:8080 -t public
+
+# URL kiểm tra
+http://127.0.0.1:8080/api/csrf
+http://127.0.0.1:8080/api/feed
+http://localhost/forum_project/api/feed

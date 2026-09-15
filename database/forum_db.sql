@@ -78,6 +78,14 @@ CREATE TABLE IF NOT EXISTS password_reset_tokens (
         ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
+CREATE TABLE IF NOT EXISTS login_attempts (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    attempt_key CHAR(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+    attempted_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    KEY idx_login_attempts_key_time (attempt_key, attempted_at),
+    KEY idx_login_attempts_cleanup (attempted_at)
+) ENGINE=InnoDB;
+
 CREATE TABLE IF NOT EXISTS categories (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     parent_id INT UNSIGNED NULL,
@@ -216,6 +224,62 @@ CREATE TABLE IF NOT EXISTS bookmarks (
         ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
+CREATE TABLE IF NOT EXISTS post_pins (
+    user_id BIGINT UNSIGNED NOT NULL,
+    post_id BIGINT UNSIGNED NOT NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_id, post_id),
+    KEY idx_post_pins_post (post_id),
+    CONSTRAINT fk_post_pins_user
+        FOREIGN KEY (user_id) REFERENCES users(id)
+        ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT fk_post_pins_post
+        FOREIGN KEY (post_id) REFERENCES posts(id)
+        ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS post_dislikes (
+    user_id BIGINT UNSIGNED NOT NULL,
+    post_id BIGINT UNSIGNED NOT NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_id, post_id),
+    KEY idx_post_dislikes_post (post_id, created_at),
+    CONSTRAINT fk_post_dislikes_user
+        FOREIGN KEY (user_id) REFERENCES users(id)
+        ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT fk_post_dislikes_post
+        FOREIGN KEY (post_id) REFERENCES posts(id)
+        ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS comment_likes (
+    user_id BIGINT UNSIGNED NOT NULL,
+    comment_id BIGINT UNSIGNED NOT NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_id, comment_id),
+    KEY idx_comment_likes_comment (comment_id, created_at),
+    CONSTRAINT fk_comment_likes_user
+        FOREIGN KEY (user_id) REFERENCES users(id)
+        ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT fk_comment_likes_comment
+        FOREIGN KEY (comment_id) REFERENCES comments(id)
+        ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS comment_dislikes (
+    user_id BIGINT UNSIGNED NOT NULL,
+    comment_id BIGINT UNSIGNED NOT NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_id, comment_id),
+    KEY idx_comment_dislikes_comment (comment_id, created_at),
+    CONSTRAINT fk_comment_dislikes_user
+        FOREIGN KEY (user_id) REFERENCES users(id)
+        ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT fk_comment_dislikes_comment
+        FOREIGN KEY (comment_id) REFERENCES comments(id)
+        ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB;
+
 CREATE TABLE IF NOT EXISTS notifications (
     id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT UNSIGNED NOT NULL,
@@ -286,11 +350,7 @@ CREATE TABLE IF NOT EXISTS moderation_logs (
     target_user_id BIGINT UNSIGNED NULL,
     post_id BIGINT UNSIGNED NULL,
     comment_id BIGINT UNSIGNED NULL,
-    action ENUM(
-        'pin_post', 'unpin_post', 'lock_post', 'unlock_post',
-        'hide_post', 'restore_post', 'hide_comment', 'restore_comment',
-        'ban_user', 'unban_user', 'change_role', 'resolve_report'
-    ) NOT NULL,
+    action VARCHAR(40) NOT NULL,
     reason TEXT NULL,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     KEY idx_moderation_logs_moderator (moderator_id, created_at),
@@ -311,6 +371,17 @@ CREATE TABLE IF NOT EXISTS moderation_logs (
         ON UPDATE CASCADE ON DELETE SET NULL
 ) ENGINE=InnoDB;
 
+CREATE TABLE IF NOT EXISTS page_views (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    path VARCHAR(255) NOT NULL,
+    user_id BIGINT UNSIGNED NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    KEY idx_page_views_created_at (created_at),
+    CONSTRAINT fk_page_views_user
+        FOREIGN KEY (user_id) REFERENCES users(id)
+        ON UPDATE CASCADE ON DELETE SET NULL
+) ENGINE=InnoDB;
+
 -- Add the circular best-answer reference safely on first or repeated imports.
 SET @best_answer_fk_exists = (
     SELECT COUNT(*)
@@ -327,3 +398,6 @@ SET @best_answer_fk_sql = IF(
 PREPARE best_answer_stmt FROM @best_answer_fk_sql;
 EXECUTE best_answer_stmt;
 DEALLOCATE PREPARE best_answer_stmt;
+
+-- Keep the audit action extensible when this schema upgrades an existing database.
+ALTER TABLE moderation_logs MODIFY action VARCHAR(40) NOT NULL;

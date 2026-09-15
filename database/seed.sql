@@ -22,6 +22,7 @@ INSERT INTO permissions (code, description) VALUES
     ('content.report', 'Báo cáo bài viết hoặc bình luận'),
     ('post.select_best_answer', 'Chọn câu trả lời hay nhất cho bài của mình'),
     ('post.moderate', 'Ghim, khóa, ẩn và khôi phục bài viết'),
+    ('post.delete_permanent', 'Xóa vĩnh viễn bài viết và tệp đính kèm'),
     ('comment.moderate', 'Ẩn và khôi phục bình luận'),
     ('report.review', 'Xử lý hàng đợi báo cáo'),
     ('user.manage', 'Quản lý vai trò và trạng thái tài khoản'),
