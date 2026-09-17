@@ -3267,6 +3267,42 @@
         }
     }
 
+    // --- Avatar Upload / Random Generator ---
+    async function uploadAvatarFile(file) {
+        const formData = new FormData();
+        formData.append('avatar', file);
+        try {
+            await refreshCsrf();
+            const res = await apiCall('/api/profile/avatar', 'POST', formData, true);
+            state.currentUser.avatar_path = res.path;
+            updateNavUserArea();
+            const preview = document.getElementById('profile-avatar-preview');
+            if (preview) preview.innerHTML = `<img src="${config.baseUrl}${res.path}">`;
+            showToast('Đã cập nhật ảnh đại diện!', 'success');
+        } catch (err) {
+            showToast(err.message, 'error');
+        }
+    }
+
+    const AVATAR_COLORS = ['#2E5EEA', '#17C3B2', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899', '#10B981', '#0EA5E9', '#F97316', '#6366F1'];
+
+    function generateRandomAvatarBlob(nameForInitials) {
+        const canvas = document.createElement('canvas');
+        canvas.width = 256;
+        canvas.height = 256;
+        const ctx = canvas.getContext('2d');
+        const color = AVATAR_COLORS[Math.floor(Math.random() * AVATAR_COLORS.length)];
+        ctx.fillStyle = color;
+        ctx.fillRect(0, 0, 256, 256);
+        const initials = (nameForInitials || '?').trim().substring(0, 2).toUpperCase();
+        ctx.fillStyle = '#FFFFFF';
+        ctx.font = 'bold 110px -apple-system, Segoe UI, Roboto, Arial, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(initials, 128, 138);
+        return new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+    }
+
     // --- Profile Modal ---
     function openProfileModal() {
         if (!state.currentUser) return;
@@ -3279,13 +3315,20 @@
             </div>
             <div class="modal-body" style="gap: 16px;">
                 <div style="display: flex; align-items: center; gap: 16px;">
-                    <div class="user-avatar" style="width: 64px; height: 64px; font-size: 24px;">
-                        ${u.avatar_path ? `<img src="${config.baseUrl}${u.avatar_path}">` : u.username.substring(0, 2).toUpperCase()}
+                    <div style="position: relative;">
+                        <div class="user-avatar" id="profile-avatar-preview" style="width: 64px; height: 64px; font-size: 24px;">
+                            ${u.avatar_path ? `<img src="${config.baseUrl}${u.avatar_path}">` : u.username.substring(0, 2).toUpperCase()}
+                        </div>
+                        <input type="file" id="profile-avatar-input" accept="image/jpeg,image/png,image/webp" style="display: none;">
                     </div>
-                    <div>
+                    <div style="flex: 1;">
                         <h3 style="font-size: 18px; font-weight: 700; color: var(--text-primary);">${escapeHtml(u.display_name)}</h3>
                         <div style="font-size: 13px; color: var(--text-muted);">u/${escapeHtml(u.username)} • ${escapeHtml(u.email || '')}</div>
                         <div style="font-size: 13px; color: #F59E0B; font-weight: 600; margin-top: 4px; display: flex; align-items: center; gap: 4px;">${Icons.star(13)} ${(u.post_karma || 0) + (u.comment_karma || 0)} Karma</div>
+                        <div style="display: flex; gap: 8px; margin-top: 8px;">
+                            <button type="button" class="btn btn-secondary" id="btn-upload-avatar" style="padding: 5px 12px; font-size: 12px;">Tải ảnh lên</button>
+                            <button type="button" class="btn btn-ghost" id="btn-random-avatar" style="padding: 5px 12px; font-size: 12px;">Ngẫu nhiên</button>
+                        </div>
                     </div>
                 </div>
 
@@ -3317,6 +3360,23 @@
         `;
 
         openModal(html);
+
+        // Avatar Upload
+        const avatarInput = document.getElementById('profile-avatar-input');
+        document.getElementById('btn-upload-avatar')?.addEventListener('click', () => {
+            avatarInput?.click();
+        });
+        avatarInput?.addEventListener('change', async () => {
+            const file = avatarInput.files?.[0];
+            if (file) await uploadAvatarFile(file);
+        });
+
+        // Random Avatar (client-side generated, no upload needed for the picker itself)
+        document.getElementById('btn-random-avatar')?.addEventListener('click', async () => {
+            const blob = await generateRandomAvatarBlob(u.display_name || u.username);
+            const file = new File([blob], 'avatar.png', { type: 'image/png' });
+            await uploadAvatarFile(file);
+        });
 
         // Save Profile
         document.getElementById('btn-save-profile')?.addEventListener('click', async () => {
