@@ -1140,6 +1140,17 @@
                         ${post.content_html || ''}
                     </div>
 
+                    <!-- Attached Images -->
+                    ${(post.images && post.images.length > 0) ? `
+                        <div class="post-images-gallery" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 8px; margin: 16px 0;">
+                            ${post.images.map(img => `
+                                <a href="${config.baseUrl}${img.file_path}" target="_blank" rel="noopener noreferrer">
+                                    <img src="${config.baseUrl}${img.file_path}" alt="${escapeHtml(img.original_name || '')}" style="width: 100%; max-height: 320px; object-fit: cover; border-radius: var(--radius-md); border: 1px solid var(--border);">
+                                </a>
+                            `).join('')}
+                        </div>
+                    ` : ''}
+
                     <!-- Tags -->
                     ${tagsHtml ? `<div class="card-tags-row" style="margin: 16px 0;">${tagsHtml}</div>` : ''}
 
