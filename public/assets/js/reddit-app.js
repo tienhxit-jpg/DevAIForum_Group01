@@ -1682,7 +1682,7 @@
     // --- Global Click & Event Binding ---
     function bindGlobalEvents() {
         document.addEventListener('click', async (e) => {
-            const target = e.target.closest('[data-action], [data-feed-action], [data-sort], [data-cat-id], [data-tag-id], [data-demo], [data-username], [data-profile-tab], #hovercard-view-profile, #btn-open-login, #btn-open-register, #btn-create-post-top, #quick-create-trigger, #quick-photo-trigger, #quick-question-trigger, #btn-sidebar-create-post, #empty-create-btn, #btn-theme-toggle, #user-profile-pill, #menu-item-profile, #menu-item-bookmarks, #menu-item-myposts, #menu-item-moderation, #menu-item-logout, #logo-home-link, #btn-load-more, #btn-clear-search, #btn-clear-active-filter, #btn-toggle-menu, #rail-my-bookmarks, #rail-my-posts, #rail-moderation-center');
+            const target = e.target.closest('[data-action], [data-feed-action], [data-sort], [data-cat-id], [data-tag-id], [data-demo], [data-username], [data-profile-tab], #hovercard-view-profile, #btn-open-login, #btn-open-register, #btn-create-post-top, #quick-create-trigger, #quick-photo-trigger, #quick-question-trigger, #btn-sidebar-create-post, #empty-create-btn, #btn-theme-toggle, #user-profile-pill, #btn-notifications, .notif-item, #btn-read-all-notifs, #menu-item-profile, #menu-item-bookmarks, #menu-item-myposts, #menu-item-moderation, #menu-item-logout, #logo-home-link, #btn-load-more, #btn-clear-search, #btn-clear-active-filter, #btn-toggle-menu, #rail-my-bookmarks, #rail-my-posts, #rail-moderation-center');
 
             if (!e.target.closest('.user-hover-card') && !e.target.closest('[data-username]')) {
                 closeUserHoverCard();
