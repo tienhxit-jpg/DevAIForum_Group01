@@ -1144,9 +1144,9 @@
                     ${(post.images && post.images.length > 0) ? `
                         <div class="post-images-gallery" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 8px; margin: 16px 0;">
                             ${post.images.map(img => `
-                                <a href="${config.baseUrl}${img.file_path}" target="_blank" rel="noopener noreferrer">
-                                    <img src="${config.baseUrl}${img.file_path}" alt="${escapeHtml(img.original_name || '')}" style="width: 100%; max-height: 320px; object-fit: cover; border-radius: var(--radius-md); border: 1px solid var(--border);">
-                                </a>
+                                <button type="button" class="post-image-thumb" data-lightbox-src="${config.baseUrl}${img.file_path}" data-lightbox-alt="${escapeHtml(img.original_name || '')}" style="padding: 0; border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; cursor: zoom-in;">
+                                    <img src="${config.baseUrl}${img.file_path}" alt="${escapeHtml(img.original_name || '')}" style="display: block; width: 100%; height: 180px; object-fit: cover;">
+                                </button>
                             `).join('')}
                         </div>
                     ` : ''}
@@ -1693,7 +1693,7 @@
     // --- Global Click & Event Binding ---
     function bindGlobalEvents() {
         document.addEventListener('click', async (e) => {
-            const target = e.target.closest('[data-action], [data-feed-action], [data-sort], [data-cat-id], [data-tag-id], [data-demo], [data-username], [data-profile-tab], #hovercard-view-profile, #btn-open-login, #btn-open-register, #btn-create-post-top, #quick-create-trigger, #quick-photo-trigger, #quick-question-trigger, #btn-sidebar-create-post, #empty-create-btn, #btn-theme-toggle, #user-profile-pill, #btn-notifications, .notif-item, #btn-read-all-notifs, #menu-item-profile, #menu-item-bookmarks, #menu-item-myposts, #menu-item-moderation, #menu-item-logout, #logo-home-link, #btn-load-more, #btn-clear-search, #btn-clear-active-filter, #btn-toggle-menu, #rail-my-bookmarks, #rail-my-posts, #rail-moderation-center');
+            const target = e.target.closest('[data-action], [data-feed-action], [data-sort], [data-cat-id], [data-tag-id], [data-demo], [data-username], [data-profile-tab], [data-lightbox-src], #hovercard-view-profile, #btn-open-login, #btn-open-register, #btn-create-post-top, #quick-create-trigger, #quick-photo-trigger, #quick-question-trigger, #btn-sidebar-create-post, #empty-create-btn, #btn-theme-toggle, #user-profile-pill, #btn-notifications, .notif-item, #btn-read-all-notifs, #menu-item-profile, #menu-item-bookmarks, #menu-item-myposts, #menu-item-moderation, #menu-item-logout, #logo-home-link, #btn-load-more, #btn-clear-search, #btn-clear-active-filter, #btn-toggle-menu, #rail-my-bookmarks, #rail-my-posts, #rail-moderation-center');
 
             if (!e.target.closest('.user-hover-card') && !e.target.closest('[data-username]')) {
                 closeUserHoverCard();
@@ -1776,6 +1776,13 @@
                 state.activeView = 'feed';
                 loadFeed(1);
                 renderLeftRail();
+                return;
+            }
+
+            // 2c. Post image lightbox
+            if (target.closest('[data-lightbox-src]')) {
+                const thumb = target.closest('[data-lightbox-src]');
+                openImageLightbox(thumb.getAttribute('data-lightbox-src'), thumb.getAttribute('data-lightbox-alt') || '');
                 return;
             }
 
@@ -2274,6 +2281,36 @@
         if (root) root.innerHTML = '';
     }
 
+    // --- Image Lightbox ---
+    function openImageLightbox(src, alt = '') {
+        const root = document.getElementById('modal-root');
+        if (!root) return;
+
+        root.innerHTML = `
+            <div class="lightbox-overlay" id="active-lightbox-overlay" style="position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 24px; animation: fadeIn 150ms ease;">
+                <button type="button" data-lightbox-close aria-label="Đóng" style="position: absolute; top: 16px; right: 20px; width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.1); color: #fff; display: flex; align-items: center; justify-content: center;">
+                    ${Icons.x(20)}
+                </button>
+                <img src="${src}" alt="${alt}" style="max-width: 100%; max-height: 90vh; object-fit: contain; border-radius: var(--radius-md);">
+            </div>
+        `;
+
+        const overlay = document.getElementById('active-lightbox-overlay');
+        overlay?.addEventListener('click', (e) => {
+            if (e.target === overlay || e.target.closest('[data-lightbox-close]')) {
+                closeModal();
+            }
+        });
+
+        const handleKeyDown = (e) => {
+            if (e.key === 'Escape') {
+                closeModal();
+                window.removeEventListener('keydown', handleKeyDown);
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+    }
+
     // --- Auth Modal (Login / Register) ---
     function openAuthModal(initialTab = 'login') {
         const html = `
@@ -2460,7 +2497,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Đính kèm ảnh (Tối đa 5 ảnh JPG/PNG/WEBP <= 2MB)</label>
+                    <label class="form-label">Đính kèm ảnh (Tối đa 5 ảnh JPG/PNG/WEBP <= 15MB)</label>
                     <input type="file" id="create-post-images" multiple accept="image/jpeg,image/png,image/webp">
                 </div>
             </div>

@@ -14,7 +14,7 @@ final class Upload
         'image/png' => 'png',
         'image/webp' => 'webp',
     ];
-    private const MAX_BYTES = 2097152;
+    private const MAX_BYTES = 15728640;
 
     public static function image(array $file, string $directory, string $publicPrefix): array
     {
@@ -23,7 +23,7 @@ final class Upload
         }
         $size = (int) ($file['size'] ?? 0);
         if ($size < 1 || $size > self::MAX_BYTES) {
-            throw new DomainException('Ảnh phải có kích thước tối đa 2MB.');
+            throw new DomainException('Ảnh phải có kích thước tối đa 15MB.');
         }
         $temporary = (string) ($file['tmp_name'] ?? '');
         $mime = (new finfo(FILEINFO_MIME_TYPE))->file($temporary);
