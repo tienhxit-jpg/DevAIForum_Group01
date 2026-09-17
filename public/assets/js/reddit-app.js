@@ -1068,6 +1068,7 @@
         const hasPinned = !!post.viewer_pinned;
         const roleBadge = post.role_name === 'admin' ? '<span class="role-badge role-admin">Admin</span>' : (post.role_name === 'moderator' ? '<span class="role-badge role-moderator">Mod</span>' : '');
         const isSolved = post.best_answer_comment_id !== null && post.best_answer_comment_id !== undefined;
+        const isPostOwner = !!(state.currentUser && state.currentUser.id === post.author_id);
 
         let tagsHtml = '';
         if (post.tags && Array.isArray(post.tags)) {
@@ -1108,6 +1109,23 @@
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
                             <span>Chia sẻ</span>
                         </button>
+                        ${isPostOwner ? `
+                        <div style="position: relative;">
+                            <button class="btn-icon" id="btn-post-options" data-action="toggle-post-menu" aria-label="Tùy chọn bài viết" title="Tùy chọn bài viết">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
+                            </button>
+                            <div class="dropdown-menu" id="post-owner-menu" style="right: 0;">
+                                <button class="dropdown-item" data-action="edit-post" data-post-id="${post.id}">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4z"/></svg>
+                                    <span>Sửa bài viết</span>
+                                </button>
+                                <button class="dropdown-item" id="btn-delete-post" data-action="delete-post" data-post-id="${post.id}" style="color: var(--color-danger);">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                                    <span>Xóa bài viết</span>
+                                </button>
+                            </div>
+                        </div>
+                        ` : ''}
                     </div>
                 </div>
 
@@ -1706,7 +1724,7 @@
             }
 
             // Close dropdowns if not clicking within user pill
-            if (!target.closest('#user-profile-pill') && !target.closest('#btn-notifications')) {
+            if (!target.closest('#user-profile-pill') && !target.closest('#btn-notifications') && !target.closest('#btn-post-options')) {
                 closeDropdowns();
             }
 
@@ -2030,6 +2048,36 @@
                 }).catch(() => {
                     showToast(`Liên kết: ${shareUrl}`, 'info');
                 });
+                return;
+            }
+
+            // 19b. Post Owner Menu (three-dot)
+            if (action === 'toggle-post-menu') {
+                document.getElementById('post-owner-menu')?.classList.toggle('active');
+                return;
+            }
+            if (action === 'edit-post' && postId) {
+                try {
+                    const res = await apiCall(`/api/posts/${postId}`);
+                    if (res?.data) openEditPostModal(res.data);
+                } catch (err) {
+                    showToast(err.message, 'error');
+                }
+                return;
+            }
+            if (action === 'delete-post' && postId) {
+                if (!confirm('Bạn có chắc chắn muốn xóa bài viết này không? Hành động này không thể hoàn tác.')) return;
+                try {
+                    await refreshCsrf();
+                    await apiCall(`/api/posts/${postId}`, 'DELETE');
+                    showToast('Đã xóa bài viết.', 'success');
+                    window.history.pushState({}, '', `${config.baseUrl}/`);
+                    state.activeView = 'feed';
+                    loadFeed(1);
+                    renderLeftRail();
+                } catch (err) {
+                    showToast(err.message, 'error');
+                }
                 return;
             }
 
@@ -2610,6 +2658,148 @@
                 } else {
                     loadFeed(1);
                 }
+            } catch (err) {
+                showToast(err.message, 'error');
+            }
+        });
+    }
+
+    // --- Edit Post Modal (Owner Only) ---
+    function openEditPostModal(post) {
+        const postTagIds = new Set((post.tags || []).map(t => t.id));
+        const categoriesOptions = state.categories.map(c => `<option value="${c.id}" ${String(c.id) === String(post.category_id) ? 'selected' : ''}>${escapeHtml(c.name)}</option>`).join('');
+        const tagsPills = state.tags.map(t => `<div class="tag-select-pill ${postTagIds.has(t.id) ? 'selected' : ''}" data-tag-picker-id="${t.id}">#${escapeHtml(t.name)}</div>`).join('');
+
+        const html = `
+            <div class="modal-header">
+                <div class="modal-title">Chỉnh Sửa Bài Viết</div>
+                <button class="modal-close-btn" data-modal-close aria-label="Đóng">${Icons.x(16)}</button>
+            </div>
+            <div class="modal-body">
+                <!-- Post Type Tabs -->
+                <div class="type-tabs-row">
+                    <button class="type-tab-btn ${post.post_type === 'discussion' ? 'active' : ''}" data-post-type="discussion">${Icons.messageCircle(14)} Thảo luận</button>
+                    <button class="type-tab-btn ${post.post_type === 'question' ? 'active' : ''}" data-post-type="question">${Icons.helpCircle(14)} Câu hỏi</button>
+                    <button class="type-tab-btn ${post.post_type === 'resource' ? 'active' : ''}" data-post-type="resource">${Icons.package(14)} Tài nguyên</button>
+                    <button class="type-tab-btn ${post.post_type === 'job' ? 'active' : ''}" data-post-type="job">${Icons.briefcase(14)} Việc làm</button>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Chuyên mục (*)</label>
+                    <select class="form-select" id="edit-post-category">
+                        ${categoriesOptions}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <div style="display: flex; justify-content: space-between;">
+                        <label class="form-label">Tiêu đề bài viết (*)</label>
+                        <span class="char-counter" id="edit-title-char-counter">${(post.title || '').length}/255</span>
+                    </div>
+                    <input type="text" class="form-input" id="edit-post-title" maxlength="255" value="${escapeHtml(post.title || '')}">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Nội dung chi tiết (*)</label>
+                    ${richTextEditorHtml('edit-post-content', 'Chia sẻ suy nghĩ, đặt câu hỏi kèm ví dụ code hay tài liệu tham khảo...')}
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Chọn thẻ công nghệ (tối đa 5 thẻ)</label>
+                    <div class="tags-selector-wrapper" id="edit-tag-picker-container">
+                        ${tagsPills}
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" data-modal-close>Hủy</button>
+                <button class="btn btn-primary" id="btn-submit-edit-post">Lưu thay đổi</button>
+            </div>
+        `;
+
+        openModal(html, 'modal-lg');
+        bindRichTextToolbar('edit-post-content');
+
+        const contentEditor = document.getElementById('edit-post-content');
+        if (contentEditor) contentEditor.innerHTML = post.content_html || '';
+
+        let selectedType = post.post_type || 'discussion';
+        const selectedTagIds = new Set(postTagIds);
+
+        document.querySelectorAll('.type-tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.type-tab-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                selectedType = btn.getAttribute('data-post-type');
+            });
+        });
+
+        const titleInput = document.getElementById('edit-post-title');
+        const charCounter = document.getElementById('edit-title-char-counter');
+        titleInput?.addEventListener('input', () => {
+            if (charCounter && titleInput) {
+                charCounter.textContent = `${titleInput.value.length}/255`;
+            }
+        });
+
+        document.querySelectorAll('#edit-tag-picker-container [data-tag-picker-id]').forEach(pill => {
+            pill.addEventListener('click', () => {
+                const id = parseInt(pill.getAttribute('data-tag-picker-id'), 10);
+                if (selectedTagIds.has(id)) {
+                    selectedTagIds.delete(id);
+                    pill.classList.remove('selected');
+                } else {
+                    if (selectedTagIds.size >= 5) {
+                        showToast('Chỉ được chọn tối đa 5 thẻ.', 'info');
+                        return;
+                    }
+                    selectedTagIds.add(id);
+                    pill.classList.add('selected');
+                }
+            });
+        });
+
+        document.getElementById('btn-submit-edit-post')?.addEventListener('click', async () => {
+            const title = titleInput?.value.trim();
+            const plainContent = contentEditor?.textContent.trim() || '';
+            const category_id = document.getElementById('edit-post-category')?.value;
+
+            if (!title) {
+                showToast('Vui lòng nhập tiêu đề bài viết.', 'error');
+                return;
+            }
+            if (title.length < 10) {
+                showToast('Tiêu đề phải có ít nhất 10 ký tự.', 'error');
+                return;
+            }
+            if (!plainContent) {
+                showToast('Vui lòng nhập nội dung bài viết.', 'error');
+                return;
+            }
+            if (plainContent.length < 10) {
+                showToast('Nội dung phải có ít nhất 10 ký tự.', 'error');
+                return;
+            }
+            if (!category_id) {
+                showToast('Vui lòng chọn chuyên mục.', 'error');
+                return;
+            }
+
+            let contentHtml = normalizeRichHtml(contentEditor.innerHTML).trim();
+            if (!contentHtml.startsWith('<')) {
+                contentHtml = `<p>${contentHtml}</p>`;
+            }
+
+            try {
+                await refreshCsrf();
+                await apiCall(`/api/posts/${post.id}`, 'PUT', {
+                    title, content_html: contentHtml, category_id, post_type: selectedType,
+                    status: post.status === 'draft' ? 'draft' : 'published',
+                    tag_ids: Array.from(selectedTagIds),
+                });
+                showToast('Đã cập nhật bài viết!', 'success');
+                closeModal();
+                openPostDetail(post.id);
             } catch (err) {
                 showToast(err.message, 'error');
             }
