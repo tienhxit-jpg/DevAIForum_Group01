@@ -84,6 +84,11 @@
     padding: 0;
 }
 
+html, body {
+    overflow-x: hidden;
+    max-width: 100%;
+}
+
 body {
     font-family: var(--font-sans);
     background-color: var(--canvas);
@@ -194,6 +199,7 @@ img {
 /* Search Bar */
 .nav-search {
     flex: 1;
+    min-width: 0;
     max-width: 620px;
     position: relative;
     display: flex;
@@ -587,6 +593,7 @@ img {
     align-items: center;
     gap: 6px;
     overflow-x: auto;
+    max-width: 100%;
     padding-bottom: 2px;
 }
 
@@ -2049,16 +2056,21 @@ img {
 @media (max-width: 480px) {
     .top-nav {
         padding: 0 8px;
-        gap: 8px;
+        gap: 6px;
     }
-    .logo-text span {
+    .logo-text {
         display: none;
     }
     .nav-search {
         max-width: none;
+        min-width: 0;
     }
     .nav-right {
         gap: 4px;
+        flex-shrink: 0;
+    }
+    #btn-theme-toggle {
+        display: none;
     }
     #btn-create-post-top span {
         display: none;
