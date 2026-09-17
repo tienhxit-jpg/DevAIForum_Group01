@@ -3316,19 +3316,22 @@
             <div class="modal-body" style="gap: 16px;">
                 <div style="display: flex; align-items: center; gap: 16px;">
                     <div style="position: relative;">
-                        <div class="user-avatar" id="profile-avatar-preview" style="width: 64px; height: 64px; font-size: 24px;">
-                            ${u.avatar_path ? `<img src="${config.baseUrl}${u.avatar_path}">` : u.username.substring(0, 2).toUpperCase()}
+                        <button type="button" id="btn-toggle-avatar-menu" class="user-avatar" style="width: 64px; height: 64px; font-size: 24px; cursor: pointer; padding: 0; border: none;" title="Đổi ảnh đại diện">
+                            <span id="profile-avatar-preview">${u.avatar_path ? `<img src="${config.baseUrl}${u.avatar_path}">` : u.username.substring(0, 2).toUpperCase()}</span>
+                        </button>
+                        <div style="position: absolute; bottom: -2px; right: -2px; width: 20px; height: 20px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; pointer-events: none; border: 2px solid var(--surface);">
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4z"/></svg>
                         </div>
                         <input type="file" id="profile-avatar-input" accept="image/jpeg,image/png,image/webp" style="display: none;">
+                        <div class="dropdown-menu" id="avatar-options-menu" style="top: calc(100% + 6px); left: 0; right: auto; width: 160px;">
+                            <button type="button" class="dropdown-item" id="btn-upload-avatar">Tải ảnh lên</button>
+                            <button type="button" class="dropdown-item" id="btn-random-avatar">Ngẫu nhiên</button>
+                        </div>
                     </div>
                     <div style="flex: 1;">
                         <h3 style="font-size: 18px; font-weight: 700; color: var(--text-primary);">${escapeHtml(u.display_name)}</h3>
                         <div style="font-size: 13px; color: var(--text-muted);">u/${escapeHtml(u.username)} • ${escapeHtml(u.email || '')}</div>
                         <div style="font-size: 13px; color: #F59E0B; font-weight: 600; margin-top: 4px; display: flex; align-items: center; gap: 4px;">${Icons.star(13)} ${(u.post_karma || 0) + (u.comment_karma || 0)} Karma</div>
-                        <div style="display: flex; gap: 8px; margin-top: 8px;">
-                            <button type="button" class="btn btn-secondary" id="btn-upload-avatar" style="padding: 5px 12px; font-size: 12px;">Tải ảnh lên</button>
-                            <button type="button" class="btn btn-ghost" id="btn-random-avatar" style="padding: 5px 12px; font-size: 12px;">Ngẫu nhiên</button>
-                        </div>
                     </div>
                 </div>
 
@@ -3361,9 +3364,22 @@
 
         openModal(html);
 
+        // Avatar Menu Toggle (only shows the upload/random options when the avatar itself is clicked)
+        const avatarMenu = document.getElementById('avatar-options-menu');
+        document.getElementById('btn-toggle-avatar-menu')?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            avatarMenu?.classList.toggle('active');
+        });
+        document.getElementById('active-modal-overlay')?.addEventListener('click', (e) => {
+            if (avatarMenu?.classList.contains('active') && !e.target.closest('#btn-toggle-avatar-menu') && !e.target.closest('#avatar-options-menu')) {
+                avatarMenu.classList.remove('active');
+            }
+        });
+
         // Avatar Upload
         const avatarInput = document.getElementById('profile-avatar-input');
         document.getElementById('btn-upload-avatar')?.addEventListener('click', () => {
+            avatarMenu?.classList.remove('active');
             avatarInput?.click();
         });
         avatarInput?.addEventListener('change', async () => {
@@ -3373,6 +3389,7 @@
 
         // Random Avatar (client-side generated, no upload needed for the picker itself)
         document.getElementById('btn-random-avatar')?.addEventListener('click', async () => {
+            avatarMenu?.classList.remove('active');
             const blob = await generateRandomAvatarBlob(u.display_name || u.username);
             const file = new File([blob], 'avatar.png', { type: 'image/png' });
             await uploadAvatarFile(file);
