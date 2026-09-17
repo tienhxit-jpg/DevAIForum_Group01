@@ -84,9 +84,8 @@
     padding: 0;
 }
 
-html, body {
+html {
     overflow-x: hidden;
-    max-width: 100%;
 }
 
 body {
