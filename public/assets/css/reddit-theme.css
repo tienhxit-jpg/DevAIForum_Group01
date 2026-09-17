@@ -2062,8 +2062,15 @@ img {
         display: none;
     }
     .nav-search {
+        flex: 0 1 90px;
         max-width: none;
         min-width: 0;
+    }
+    .search-input {
+        padding: 0 8px 0 34px;
+    }
+    .search-input::placeholder {
+        opacity: 0;
     }
     .nav-right {
         gap: 4px;
@@ -2077,6 +2084,7 @@ img {
     }
     #btn-create-post-top {
         padding: 6px 10px;
+        flex-shrink: 0;
     }
     .user-info-text {
         display: none;
