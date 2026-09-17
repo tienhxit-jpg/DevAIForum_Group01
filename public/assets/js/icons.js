@@ -1,7 +1,7 @@
 /**
  * DevAI Hub - Shared inline SVG icon set.
  * Stroke-style icons (24x24 viewBox, currentColor) matching the site's existing icon language.
- * Loaded before reddit-app.js and admin-app.js so both can call window.Icons.xxx(size).
+ * Loaded before devai-app.js and admin-app.js so both can call window.Icons.xxx(size).
  */
 (function () {
     'use strict';
