@@ -28,6 +28,8 @@ final class HomeController extends Controller
         }
 
         $csrfToken = Csrf::token();
+        $cssVer = @filemtime(dirname(__DIR__, 2) . '/public/assets/css/reddit-theme.css') ?: time();
+        $jsVer = @filemtime(dirname(__DIR__, 2) . '/public/assets/js/reddit-app.js') ?: time();
 
         $html = <<<HTML
 <!DOCTYPE html>
@@ -40,7 +42,7 @@ final class HomeController extends Controller
     <meta name="base-url" content="{$baseUrl}">
     <meta name="csrf-token" content="{$csrfToken}">
     <link rel="icon" type="image/svg+xml" href="{$baseUrl}/assets/img/logo-icon.svg">
-    <link rel="stylesheet" href="{$baseUrl}/assets/css/reddit-theme.css">
+    <link rel="stylesheet" href="{$baseUrl}/assets/css/reddit-theme.css?v={$cssVer}">
 </head>
 <body data-base-url="{$baseUrl}">
     <!-- App Root -->
@@ -53,7 +55,7 @@ final class HomeController extends Controller
     <div id="toast-container" class="toast-container" aria-live="polite"></div>
 
     <script src="{$baseUrl}/assets/js/icons.js"></script>
-    <script src="{$baseUrl}/assets/js/reddit-app.js" defer></script>
+    <script src="{$baseUrl}/assets/js/reddit-app.js?v={$jsVer}" defer></script>
 </body>
 </html>
 HTML;

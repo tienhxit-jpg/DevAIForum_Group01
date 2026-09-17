@@ -346,8 +346,9 @@
             console.error('Failed to load taxonomies:', e);
         }
 
-        // Check if current URL is a post detail route (e.g. /posts/123 or ?post=123)
+        // Check if current URL is a post detail / user profile route (e.g. /posts/123, /u/username, ?post=123)
         const pathMatches = window.location.pathname.match(/\/posts\/(\d+)/);
+        const userPathMatches = window.location.pathname.match(/\/u\/([^/]+)/);
         const urlParams = new URLSearchParams(window.location.search);
         const urlPostId = pathMatches ? pathMatches[1] : urlParams.get('post');
 
@@ -355,6 +356,8 @@
             await openModerationCenter(false);
         } else if (urlPostId) {
             await openPostDetail(parseInt(urlPostId, 10), false);
+        } else if (userPathMatches) {
+            await openUserProfilePage(decodeURIComponent(userPathMatches[1]), false);
         } else {
             await loadFeed(1);
         }
@@ -432,6 +435,9 @@
     function updateNavUserArea() {
         const container = document.getElementById('nav-right-area');
         if (!container) return;
+
+        const wasNotifDropdownOpen = document.getElementById('notifications-dropdown')?.classList.contains('active');
+        const wasUserMenuOpen = document.getElementById('user-menu-dropdown')?.classList.contains('active');
 
         const isDark = state.theme === 'dark';
         const themeToggleBtn = `
@@ -515,6 +521,14 @@
                     </div>
                 </div>
             `;
+
+            if (wasNotifDropdownOpen) {
+                document.getElementById('notifications-dropdown')?.classList.add('active');
+                renderNotificationsDropdown();
+            }
+            if (wasUserMenuOpen) {
+                document.getElementById('user-menu-dropdown')?.classList.add('active');
+            }
         } else {
             container.innerHTML = `
                 <div style="display: flex; gap: 4px; margin-right: 4px;">
@@ -1057,6 +1071,7 @@
         const hasPinned = !!post.viewer_pinned;
         const roleBadge = post.role_name === 'admin' ? '<span class="role-badge role-admin">Admin</span>' : (post.role_name === 'moderator' ? '<span class="role-badge role-moderator">Mod</span>' : '');
         const isSolved = post.best_answer_comment_id !== null && post.best_answer_comment_id !== undefined;
+        const isPostOwner = !!(state.currentUser && state.currentUser.id === post.author_id);
 
         let tagsHtml = '';
         if (post.tags && Array.isArray(post.tags)) {
@@ -1097,6 +1112,23 @@
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
                             <span>Chia sẻ</span>
                         </button>
+                        ${isPostOwner ? `
+                        <div style="position: relative;">
+                            <button class="btn-icon" id="btn-post-options" data-action="toggle-post-menu" aria-label="Tùy chọn bài viết" title="Tùy chọn bài viết">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
+                            </button>
+                            <div class="dropdown-menu" id="post-owner-menu" style="right: 0;">
+                                <button class="dropdown-item" data-action="edit-post" data-post-id="${post.id}">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4z"/></svg>
+                                    <span>Sửa bài viết</span>
+                                </button>
+                                <button class="dropdown-item" id="btn-delete-post" data-action="delete-post" data-post-id="${post.id}" style="color: var(--color-danger);">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                                    <span>Xóa bài viết</span>
+                                </button>
+                            </div>
+                        </div>
+                        ` : ''}
                     </div>
                 </div>
 
@@ -1128,6 +1160,17 @@
                     <div class="post-full-body">
                         ${post.content_html || ''}
                     </div>
+
+                    <!-- Attached Images -->
+                    ${(post.images && post.images.length > 0) ? `
+                        <div class="post-images-gallery" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 8px; margin: 16px 0;">
+                            ${post.images.map(img => `
+                                <button type="button" class="post-image-thumb" data-lightbox-src="${config.baseUrl}${img.file_path}" data-lightbox-alt="${escapeHtml(img.original_name || '')}" style="padding: 0; border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; cursor: zoom-in;">
+                                    <img src="${config.baseUrl}${img.file_path}" alt="${escapeHtml(img.original_name || '')}" style="display: block; width: 100%; height: 180px; object-fit: cover;">
+                                </button>
+                            `).join('')}
+                        </div>
+                    ` : ''}
 
                     <!-- Tags -->
                     ${tagsHtml ? `<div class="card-tags-row" style="margin: 16px 0;">${tagsHtml}</div>` : ''}
@@ -1438,7 +1481,7 @@
         const roleBadge = p.role_name === 'admin' ? '<span class="role-badge role-admin">Admin</span>' : (p.role_name === 'moderator' ? '<span class="role-badge role-moderator">Mod</span>' : '');
         const initial = escapeHtml((p.display_name || p.username || '?').charAt(0).toUpperCase());
         const avatarHtml = p.avatar_path
-            ? `<img src="${escapeHtml(p.avatar_path)}" alt="${escapeHtml(p.username)}" class="profile-page-avatar-img">`
+            ? `<img src="${config.baseUrl}${escapeHtml(p.avatar_path)}" alt="${escapeHtml(p.username)}" class="profile-page-avatar-img">`
             : `<div class="profile-page-avatar-fallback">${initial}</div>`;
 
         const tabs = [
@@ -1644,7 +1687,7 @@
             const roleBadge = p.role_name === 'admin' ? '<span class="role-badge role-admin">Admin</span>' : (p.role_name === 'moderator' ? '<span class="role-badge role-moderator">Mod</span>' : '');
             const initial = escapeHtml((p.display_name || p.username || '?').charAt(0).toUpperCase());
             const avatarHtml = p.avatar_path
-                ? `<img src="${escapeHtml(p.avatar_path)}" class="user-hover-card-avatar-img" alt="${escapeHtml(p.username)}">`
+                ? `<img src="${config.baseUrl}${escapeHtml(p.avatar_path)}" class="user-hover-card-avatar-img" alt="${escapeHtml(p.username)}">`
                 : `<div class="user-hover-card-avatar-fallback">${initial}</div>`;
 
             root.innerHTML = `
@@ -1671,7 +1714,7 @@
     // --- Global Click & Event Binding ---
     function bindGlobalEvents() {
         document.addEventListener('click', async (e) => {
-            const target = e.target.closest('[data-action], [data-feed-action], [data-sort], [data-cat-id], [data-tag-id], [data-demo], [data-username], [data-profile-tab], #hovercard-view-profile, #btn-open-login, #btn-open-register, #btn-create-post-top, #quick-create-trigger, #quick-photo-trigger, #quick-question-trigger, #btn-sidebar-create-post, #empty-create-btn, #btn-theme-toggle, #user-profile-pill, #menu-item-profile, #menu-item-bookmarks, #menu-item-myposts, #menu-item-moderation, #menu-item-logout, #logo-home-link, #btn-load-more, #btn-clear-search, #btn-clear-active-filter, #btn-toggle-menu, #rail-my-bookmarks, #rail-my-posts, #rail-moderation-center');
+            const target = e.target.closest('[data-action], [data-feed-action], [data-sort], [data-cat-id], [data-tag-id], [data-demo], [data-username], [data-profile-tab], [data-lightbox-src], #hovercard-view-profile, #btn-open-login, #btn-open-register, #btn-create-post-top, #quick-create-trigger, #quick-photo-trigger, #quick-question-trigger, #btn-sidebar-create-post, #empty-create-btn, #btn-theme-toggle, #user-profile-pill, #btn-notifications, .notif-item, #btn-read-all-notifs, #menu-item-profile, #menu-item-bookmarks, #menu-item-myposts, #menu-item-moderation, #menu-item-logout, #logo-home-link, #btn-load-more, #btn-clear-search, #btn-clear-active-filter, #btn-toggle-menu, #rail-my-bookmarks, #rail-my-posts, #rail-moderation-center');
 
             if (!e.target.closest('.user-hover-card') && !e.target.closest('[data-username]')) {
                 closeUserHoverCard();
@@ -1684,7 +1727,7 @@
             }
 
             // Close dropdowns if not clicking within user pill
-            if (!target.closest('#user-profile-pill') && !target.closest('#btn-notifications')) {
+            if (!target.closest('#user-profile-pill') && !target.closest('#btn-notifications') && !target.closest('#btn-post-options')) {
                 closeDropdowns();
             }
 
@@ -1754,6 +1797,13 @@
                 state.activeView = 'feed';
                 loadFeed(1);
                 renderLeftRail();
+                return;
+            }
+
+            // 2c. Post image lightbox
+            if (target.closest('[data-lightbox-src]')) {
+                const thumb = target.closest('[data-lightbox-src]');
+                openImageLightbox(thumb.getAttribute('data-lightbox-src'), thumb.getAttribute('data-lightbox-alt') || '');
                 return;
             }
 
@@ -2004,6 +2054,36 @@
                 return;
             }
 
+            // 19b. Post Owner Menu (three-dot)
+            if (action === 'toggle-post-menu') {
+                document.getElementById('post-owner-menu')?.classList.toggle('active');
+                return;
+            }
+            if (action === 'edit-post' && postId) {
+                try {
+                    const res = await apiCall(`/api/posts/${postId}`);
+                    if (res?.data) openEditPostModal(res.data);
+                } catch (err) {
+                    showToast(err.message, 'error');
+                }
+                return;
+            }
+            if (action === 'delete-post' && postId) {
+                if (!confirm('Bạn có chắc chắn muốn xóa bài viết này không? Hành động này không thể hoàn tác.')) return;
+                try {
+                    await refreshCsrf();
+                    await apiCall(`/api/posts/${postId}`, 'DELETE');
+                    showToast('Đã xóa bài viết.', 'success');
+                    window.history.pushState({}, '', `${config.baseUrl}/`);
+                    state.activeView = 'feed';
+                    loadFeed(1);
+                    renderLeftRail();
+                } catch (err) {
+                    showToast(err.message, 'error');
+                }
+                return;
+            }
+
             // 20. Report Action
             if (action === 'report' && postId) {
                 openReportModal(parseInt(postId, 10), null);
@@ -2173,10 +2253,13 @@
         // Browser back/forward navigation
         window.addEventListener('popstate', (e) => {
             const pathMatches = window.location.pathname.match(/\/posts\/(\d+)/);
+            const userPathMatches = window.location.pathname.match(/\/u\/([^/]+)/);
             if (window.location.pathname.endsWith('/moderation') && canAccessModerationCenter()) {
                 openModerationCenter(false);
             } else if (pathMatches) {
                 openPostDetail(parseInt(pathMatches[1], 10), false);
+            } else if (userPathMatches) {
+                openUserProfilePage(decodeURIComponent(userPathMatches[1]), false);
             } else {
                 state.activeView = 'feed';
                 loadFeed(1);
@@ -2250,6 +2333,36 @@
     function closeModal() {
         const root = document.getElementById('modal-root');
         if (root) root.innerHTML = '';
+    }
+
+    // --- Image Lightbox ---
+    function openImageLightbox(src, alt = '') {
+        const root = document.getElementById('modal-root');
+        if (!root) return;
+
+        root.innerHTML = `
+            <div class="lightbox-overlay" id="active-lightbox-overlay" style="position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 24px; animation: fadeIn 150ms ease;">
+                <button type="button" data-lightbox-close aria-label="Đóng" style="position: absolute; top: 16px; right: 20px; width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.1); color: #fff; display: flex; align-items: center; justify-content: center;">
+                    ${Icons.x(20)}
+                </button>
+                <img src="${src}" alt="${alt}" style="max-width: 100%; max-height: 90vh; object-fit: contain; border-radius: var(--radius-md);">
+            </div>
+        `;
+
+        const overlay = document.getElementById('active-lightbox-overlay');
+        overlay?.addEventListener('click', (e) => {
+            if (e.target === overlay || e.target.closest('[data-lightbox-close]')) {
+                closeModal();
+            }
+        });
+
+        const handleKeyDown = (e) => {
+            if (e.key === 'Escape') {
+                closeModal();
+                window.removeEventListener('keydown', handleKeyDown);
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
     }
 
     // --- Auth Modal (Login / Register) ---
@@ -2438,7 +2551,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Đính kèm ảnh (Tối đa 5 ảnh JPG/PNG/WEBP <= 2MB)</label>
+                    <label class="form-label">Đính kèm ảnh (Tối đa 5 ảnh JPG/PNG/WEBP <= 15MB)</label>
                     <input type="file" id="create-post-images" multiple accept="image/jpeg,image/png,image/webp">
                 </div>
             </div>
@@ -2551,6 +2664,148 @@
                 } else {
                     loadFeed(1);
                 }
+            } catch (err) {
+                showToast(err.message, 'error');
+            }
+        });
+    }
+
+    // --- Edit Post Modal (Owner Only) ---
+    function openEditPostModal(post) {
+        const postTagIds = new Set((post.tags || []).map(t => t.id));
+        const categoriesOptions = state.categories.map(c => `<option value="${c.id}" ${String(c.id) === String(post.category_id) ? 'selected' : ''}>${escapeHtml(c.name)}</option>`).join('');
+        const tagsPills = state.tags.map(t => `<div class="tag-select-pill ${postTagIds.has(t.id) ? 'selected' : ''}" data-tag-picker-id="${t.id}">#${escapeHtml(t.name)}</div>`).join('');
+
+        const html = `
+            <div class="modal-header">
+                <div class="modal-title">Chỉnh Sửa Bài Viết</div>
+                <button class="modal-close-btn" data-modal-close aria-label="Đóng">${Icons.x(16)}</button>
+            </div>
+            <div class="modal-body">
+                <!-- Post Type Tabs -->
+                <div class="type-tabs-row">
+                    <button class="type-tab-btn ${post.post_type === 'discussion' ? 'active' : ''}" data-post-type="discussion">${Icons.messageCircle(14)} Thảo luận</button>
+                    <button class="type-tab-btn ${post.post_type === 'question' ? 'active' : ''}" data-post-type="question">${Icons.helpCircle(14)} Câu hỏi</button>
+                    <button class="type-tab-btn ${post.post_type === 'resource' ? 'active' : ''}" data-post-type="resource">${Icons.package(14)} Tài nguyên</button>
+                    <button class="type-tab-btn ${post.post_type === 'job' ? 'active' : ''}" data-post-type="job">${Icons.briefcase(14)} Việc làm</button>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Chuyên mục (*)</label>
+                    <select class="form-select" id="edit-post-category">
+                        ${categoriesOptions}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <div style="display: flex; justify-content: space-between;">
+                        <label class="form-label">Tiêu đề bài viết (*)</label>
+                        <span class="char-counter" id="edit-title-char-counter">${(post.title || '').length}/255</span>
+                    </div>
+                    <input type="text" class="form-input" id="edit-post-title" maxlength="255" value="${escapeHtml(post.title || '')}">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Nội dung chi tiết (*)</label>
+                    ${richTextEditorHtml('edit-post-content', 'Chia sẻ suy nghĩ, đặt câu hỏi kèm ví dụ code hay tài liệu tham khảo...')}
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Chọn thẻ công nghệ (tối đa 5 thẻ)</label>
+                    <div class="tags-selector-wrapper" id="edit-tag-picker-container">
+                        ${tagsPills}
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" data-modal-close>Hủy</button>
+                <button class="btn btn-primary" id="btn-submit-edit-post">Lưu thay đổi</button>
+            </div>
+        `;
+
+        openModal(html, 'modal-lg');
+        bindRichTextToolbar('edit-post-content');
+
+        const contentEditor = document.getElementById('edit-post-content');
+        if (contentEditor) contentEditor.innerHTML = post.content_html || '';
+
+        let selectedType = post.post_type || 'discussion';
+        const selectedTagIds = new Set(postTagIds);
+
+        document.querySelectorAll('.type-tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.type-tab-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                selectedType = btn.getAttribute('data-post-type');
+            });
+        });
+
+        const titleInput = document.getElementById('edit-post-title');
+        const charCounter = document.getElementById('edit-title-char-counter');
+        titleInput?.addEventListener('input', () => {
+            if (charCounter && titleInput) {
+                charCounter.textContent = `${titleInput.value.length}/255`;
+            }
+        });
+
+        document.querySelectorAll('#edit-tag-picker-container [data-tag-picker-id]').forEach(pill => {
+            pill.addEventListener('click', () => {
+                const id = parseInt(pill.getAttribute('data-tag-picker-id'), 10);
+                if (selectedTagIds.has(id)) {
+                    selectedTagIds.delete(id);
+                    pill.classList.remove('selected');
+                } else {
+                    if (selectedTagIds.size >= 5) {
+                        showToast('Chỉ được chọn tối đa 5 thẻ.', 'info');
+                        return;
+                    }
+                    selectedTagIds.add(id);
+                    pill.classList.add('selected');
+                }
+            });
+        });
+
+        document.getElementById('btn-submit-edit-post')?.addEventListener('click', async () => {
+            const title = titleInput?.value.trim();
+            const plainContent = contentEditor?.textContent.trim() || '';
+            const category_id = document.getElementById('edit-post-category')?.value;
+
+            if (!title) {
+                showToast('Vui lòng nhập tiêu đề bài viết.', 'error');
+                return;
+            }
+            if (title.length < 10) {
+                showToast('Tiêu đề phải có ít nhất 10 ký tự.', 'error');
+                return;
+            }
+            if (!plainContent) {
+                showToast('Vui lòng nhập nội dung bài viết.', 'error');
+                return;
+            }
+            if (plainContent.length < 10) {
+                showToast('Nội dung phải có ít nhất 10 ký tự.', 'error');
+                return;
+            }
+            if (!category_id) {
+                showToast('Vui lòng chọn chuyên mục.', 'error');
+                return;
+            }
+
+            let contentHtml = normalizeRichHtml(contentEditor.innerHTML).trim();
+            if (!contentHtml.startsWith('<')) {
+                contentHtml = `<p>${contentHtml}</p>`;
+            }
+
+            try {
+                await refreshCsrf();
+                await apiCall(`/api/posts/${post.id}`, 'PUT', {
+                    title, content_html: contentHtml, category_id, post_type: selectedType,
+                    status: post.status === 'draft' ? 'draft' : 'published',
+                    tag_ids: Array.from(selectedTagIds),
+                });
+                showToast('Đã cập nhật bài viết!', 'success');
+                closeModal();
+                openPostDetail(post.id);
             } catch (err) {
                 showToast(err.message, 'error');
             }
@@ -3018,6 +3273,42 @@
         }
     }
 
+    // --- Avatar Upload / Random Generator ---
+    async function uploadAvatarFile(file) {
+        const formData = new FormData();
+        formData.append('avatar', file);
+        try {
+            await refreshCsrf();
+            const res = await apiCall('/api/profile/avatar', 'POST', formData, true);
+            state.currentUser.avatar_path = res.path;
+            updateNavUserArea();
+            const preview = document.getElementById('profile-avatar-preview');
+            if (preview) preview.innerHTML = `<img src="${config.baseUrl}${res.path}">`;
+            showToast('Đã cập nhật ảnh đại diện!', 'success');
+        } catch (err) {
+            showToast(err.message, 'error');
+        }
+    }
+
+    const AVATAR_COLORS = ['#2E5EEA', '#17C3B2', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899', '#10B981', '#0EA5E9', '#F97316', '#6366F1'];
+
+    function generateRandomAvatarBlob(nameForInitials) {
+        const canvas = document.createElement('canvas');
+        canvas.width = 256;
+        canvas.height = 256;
+        const ctx = canvas.getContext('2d');
+        const color = AVATAR_COLORS[Math.floor(Math.random() * AVATAR_COLORS.length)];
+        ctx.fillStyle = color;
+        ctx.fillRect(0, 0, 256, 256);
+        const initials = (nameForInitials || '?').trim().substring(0, 2).toUpperCase();
+        ctx.fillStyle = '#FFFFFF';
+        ctx.font = 'bold 110px -apple-system, Segoe UI, Roboto, Arial, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(initials, 128, 138);
+        return new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+    }
+
     // --- Profile Modal ---
     function openProfileModal() {
         if (!state.currentUser) return;
@@ -3030,10 +3321,20 @@
             </div>
             <div class="modal-body" style="gap: 16px;">
                 <div style="display: flex; align-items: center; gap: 16px;">
-                    <div class="user-avatar" style="width: 64px; height: 64px; font-size: 24px;">
-                        ${u.avatar_path ? `<img src="${config.baseUrl}${u.avatar_path}">` : u.username.substring(0, 2).toUpperCase()}
+                    <div style="position: relative;">
+                        <button type="button" id="btn-toggle-avatar-menu" class="user-avatar" style="width: 64px; height: 64px; font-size: 24px; cursor: pointer; padding: 0; border: none;" title="Đổi ảnh đại diện">
+                            <span id="profile-avatar-preview">${u.avatar_path ? `<img src="${config.baseUrl}${u.avatar_path}">` : u.username.substring(0, 2).toUpperCase()}</span>
+                        </button>
+                        <div style="position: absolute; bottom: -2px; right: -2px; width: 20px; height: 20px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; pointer-events: none; border: 2px solid var(--surface);">
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4z"/></svg>
+                        </div>
+                        <input type="file" id="profile-avatar-input" accept="image/jpeg,image/png,image/webp" style="display: none;">
+                        <div class="dropdown-menu" id="avatar-options-menu" style="top: calc(100% + 6px); left: 0; right: auto; width: 160px;">
+                            <button type="button" class="dropdown-item" id="btn-upload-avatar">Tải ảnh lên</button>
+                            <button type="button" class="dropdown-item" id="btn-random-avatar">Ngẫu nhiên</button>
+                        </div>
                     </div>
-                    <div>
+                    <div style="flex: 1;">
                         <h3 style="font-size: 18px; font-weight: 700; color: var(--text-primary);">${escapeHtml(u.display_name)}</h3>
                         <div style="font-size: 13px; color: var(--text-muted);">u/${escapeHtml(u.username)} • ${escapeHtml(u.email || '')}</div>
                         <div style="font-size: 13px; color: #F59E0B; font-weight: 600; margin-top: 4px; display: flex; align-items: center; gap: 4px;">${Icons.star(13)} ${(u.post_karma || 0) + (u.comment_karma || 0)} Karma</div>
@@ -3068,6 +3369,37 @@
         `;
 
         openModal(html);
+
+        // Avatar Menu Toggle (only shows the upload/random options when the avatar itself is clicked)
+        const avatarMenu = document.getElementById('avatar-options-menu');
+        document.getElementById('btn-toggle-avatar-menu')?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            avatarMenu?.classList.toggle('active');
+        });
+        document.getElementById('active-modal-overlay')?.addEventListener('click', (e) => {
+            if (avatarMenu?.classList.contains('active') && !e.target.closest('#btn-toggle-avatar-menu') && !e.target.closest('#avatar-options-menu')) {
+                avatarMenu.classList.remove('active');
+            }
+        });
+
+        // Avatar Upload
+        const avatarInput = document.getElementById('profile-avatar-input');
+        document.getElementById('btn-upload-avatar')?.addEventListener('click', () => {
+            avatarMenu?.classList.remove('active');
+            avatarInput?.click();
+        });
+        avatarInput?.addEventListener('change', async () => {
+            const file = avatarInput.files?.[0];
+            if (file) await uploadAvatarFile(file);
+        });
+
+        // Random Avatar (client-side generated, no upload needed for the picker itself)
+        document.getElementById('btn-random-avatar')?.addEventListener('click', async () => {
+            avatarMenu?.classList.remove('active');
+            const blob = await generateRandomAvatarBlob(u.display_name || u.username);
+            const file = new File([blob], 'avatar.png', { type: 'image/png' });
+            await uploadAvatarFile(file);
+        });
 
         // Save Profile
         document.getElementById('btn-save-profile')?.addEventListener('click', async () => {
@@ -3136,7 +3468,7 @@
             </div>
             <div style="max-height: 280px; overflow-y: auto;">
                 ${state.notifications.map(n => `
-                    <div style="padding: 8px 12px; border-bottom: 1px solid var(--border-subtle); font-size: 12.5px; ${n.is_read ? 'opacity: 0.7;' : 'background: var(--surface-selected);'}" data-notif-id="${n.id}">
+                    <div class="notif-item" style="padding: 8px 12px; border-bottom: 1px solid var(--border-subtle); font-size: 12.5px; cursor: pointer; ${n.is_read ? 'opacity: 0.7;' : 'background: var(--surface-selected);'}" data-notif-id="${n.id}" data-post-id="${n.post_id || ''}">
                         <div>${escapeHtml(n.message)}</div>
                         <div style="font-size: 10.5px; color: var(--text-muted); margin-top: 2px;">${timeAgo(n.created_at)}</div>
                     </div>
@@ -3154,6 +3486,28 @@
             } catch (err) {
                 showToast(err.message, 'error');
             }
+        });
+
+        dropdown.querySelectorAll('.notif-item').forEach(item => {
+            item.addEventListener('click', async () => {
+                const notifId = parseInt(item.getAttribute('data-notif-id'), 10);
+                const postId = item.getAttribute('data-post-id');
+                const notif = state.notifications.find(n => n.id === notifId);
+                if (notif && !notif.is_read) {
+                    try {
+                        await apiCall(`/api/notifications/${notifId}/read`, 'PATCH');
+                        notif.is_read = 1;
+                        state.unreadNotificationsCount = Math.max(0, state.unreadNotificationsCount - 1);
+                        updateNavUserArea();
+                    } catch (err) {
+                        // silent fail, still navigate
+                    }
+                }
+                document.getElementById('notifications-dropdown')?.classList.remove('active');
+                if (postId) {
+                    openPostDetail(postId);
+                }
+            });
         });
     }
 

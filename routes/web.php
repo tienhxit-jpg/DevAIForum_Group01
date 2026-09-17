@@ -19,6 +19,7 @@ $router = new Router();
 $router->get('/', [HomeController::class, 'index']);
 $router->get('/posts/{id}', [HomeController::class, 'index']);
 $router->get('/moderation', [HomeController::class, 'index']);
+$router->get('/u/{username}', [HomeController::class, 'index']);
 
 $router->get('/admin', [AdminController::class, 'panel']);
 $router->get('/admin/users', [AdminController::class, 'panel']);
