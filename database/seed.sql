@@ -28,7 +28,9 @@ INSERT INTO permissions (code, description) VALUES
     ('user.manage', 'Quản lý vai trò và trạng thái tài khoản'),
     ('category.manage', 'Quản lý chuyên mục'),
     ('tag.manage', 'Quản lý thẻ công nghệ'),
-    ('dashboard.view', 'Xem dashboard quản trị')
+    ('dashboard.view', 'Xem dashboard quản trị'),
+    ('post.appeal', 'Gửi kháng cáo cho bài viết bị ẩn của chính mình'),
+    ('appeal.review', 'Duyệt hoặc từ chối kháng cáo bài viết')
 ON DUPLICATE KEY UPDATE description = VALUES(description);
 
 -- Member permissions.
@@ -38,7 +40,8 @@ FROM roles r
 JOIN permissions p ON p.code IN (
     'post.create', 'post.update_own', 'post.delete_own',
     'comment.create', 'comment.update_own', 'comment.delete_own',
-    'post.like', 'post.bookmark', 'content.report', 'post.select_best_answer'
+    'post.like', 'post.bookmark', 'content.report', 'post.select_best_answer',
+    'post.appeal'
 )
 WHERE r.name = 'member';
 
@@ -50,7 +53,7 @@ JOIN permissions p ON p.code IN (
     'post.create', 'post.update_own', 'post.delete_own',
     'comment.create', 'comment.update_own', 'comment.delete_own',
     'post.like', 'post.bookmark', 'content.report', 'post.select_best_answer',
-    'post.moderate', 'comment.moderate', 'report.review'
+    'post.moderate', 'comment.moderate', 'report.review', 'post.appeal'
 )
 WHERE r.name = 'moderator';
 

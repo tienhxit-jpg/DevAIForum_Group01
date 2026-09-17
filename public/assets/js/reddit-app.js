@@ -1078,6 +1078,30 @@
             tagsHtml = post.tags.map(t => `<span class="tag-chip" data-tag-id="${t.id}">#${escapeHtml(t.name)}</span>`).join('');
         }
 
+        // Hidden-post banner + appeal flow (post owner only)
+        let hiddenBannerHtml = '';
+        if (post.status === 'hidden' && isPostOwner) {
+            const appeal = post.appeal || null;
+            let appealActionHtml = '';
+            if (appeal && appeal.status === 'pending') {
+                appealActionHtml = `<div class="appeal-status-badge appeal-status-pending">${Icons.clock ? Icons.clock(14) : ''} Kháng cáo của bạn đang chờ quản trị viên xem xét (gửi lúc ${timeAgo(appeal.created_at)}).</div>`;
+            } else {
+                if (appeal && appeal.status === 'rejected') {
+                    appealActionHtml = `<div class="appeal-status-badge appeal-status-rejected">Kháng cáo trước đó đã bị từ chối. Lý do: ${escapeHtml(appeal.admin_reason || 'Không có ghi chú.')}</div>`;
+                }
+                appealActionHtml += `<button type="button" class="btn btn-secondary" data-action="open-appeal" data-post-id="${post.id}" style="margin-top: 10px;">Gửi kháng cáo</button>`;
+            }
+            hiddenBannerHtml = `
+                <div class="hidden-post-banner">
+                    <div style="display: flex; align-items: center; gap: 8px; font-weight: 700; color: var(--color-danger);">
+                        ${Icons.alertTriangle(16)} Bài viết này đã bị quản trị viên ẩn khỏi diễn đàn
+                    </div>
+                    <div style="font-size: 13px; color: var(--text-secondary); margin-top: 6px;">Lý do: ${escapeHtml(post.hidden_reason || 'Không có ghi chú.')}</div>
+                    ${appealActionHtml}
+                </div>
+            `;
+        }
+
         // Check Best Answer
         let bestAnswerHtml = '';
         let bestAnswerComment = null;
@@ -1150,6 +1174,8 @@
                         ${hasPinned ? `<span class="badge-pinned badge-pinned-self">${Icons.pin(12)} Bạn đã ghim</span>` : ''}
                         ${isSolved ? `<span class="badge-solved">${Icons.checkCircle(12)} Đã giải quyết</span>` : ''}
                     </div>
+
+                    ${hiddenBannerHtml}
 
                     <!-- Post Title -->
                     <h1 style="font-size: 22px; font-weight: 700; line-height: 1.35; margin-bottom: 14px; color: var(--text-primary);">
@@ -2059,6 +2085,10 @@
                 document.getElementById('post-owner-menu')?.classList.toggle('active');
                 return;
             }
+            if (action === 'open-appeal' && postId) {
+                openAppealModal(parseInt(postId, 10));
+                return;
+            }
             if (action === 'edit-post' && postId) {
                 try {
                     const res = await apiCall(`/api/posts/${postId}`);
@@ -2861,6 +2891,59 @@
                 await apiCall('/api/reports', 'POST', payload);
                 showToast('Cảm ơn bạn! Báo cáo đã được gửi tới đội ngũ quản trị kiểm duyệt.', 'success');
                 closeModal();
+            } catch (err) {
+                showToast(err.message, 'error');
+            }
+        });
+    }
+
+    // --- Post Appeal Modal ---
+    function openAppealModal(postId) {
+        if (!state.currentUser) {
+            showToast('Vui lòng đăng nhập để gửi kháng cáo.', 'info');
+            openAuthModal('login');
+            return;
+        }
+
+        const html = `
+            <div class="modal-header">
+                <div class="modal-title">Gửi Kháng Cáo</div>
+                <button class="modal-close-btn" data-modal-close aria-label="Đóng">${Icons.x(16)}</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <div style="display: flex; justify-content: space-between;">
+                        <label class="form-label">Lý do kháng cáo (*)</label>
+                        <span class="char-counter" id="appeal-reason-char-counter">0/2000</span>
+                    </div>
+                    <textarea class="form-textarea" id="appeal-reason-input" rows="6" maxlength="2000" placeholder="Giải thích vì sao bạn cho rằng bài viết không vi phạm quy định, hoặc lý do bạn muốn quản trị viên xem xét lại (tối thiểu 20 ký tự)..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" data-modal-close>Hủy</button>
+                <button class="btn btn-primary" id="btn-submit-appeal">Gửi kháng cáo</button>
+            </div>
+        `;
+
+        openModal(html);
+
+        const reasonInput = document.getElementById('appeal-reason-input');
+        const charCounter = document.getElementById('appeal-reason-char-counter');
+        reasonInput?.addEventListener('input', () => {
+            if (charCounter && reasonInput) charCounter.textContent = `${reasonInput.value.length}/2000`;
+        });
+
+        document.getElementById('btn-submit-appeal')?.addEventListener('click', async () => {
+            const reason = reasonInput?.value.trim() || '';
+            if (reason.length < 20) {
+                showToast('Vui lòng trình bày lý do kháng cáo chi tiết hơn (tối thiểu 20 ký tự).', 'error');
+                return;
+            }
+            try {
+                await apiCall(`/api/posts/${postId}/appeal`, 'POST', { reason });
+                showToast('Đã gửi kháng cáo. Quản trị viên sẽ xem xét sớm nhất.', 'success');
+                closeModal();
+                openPostDetail(postId, false);
             } catch (err) {
                 showToast(err.message, 'error');
             }

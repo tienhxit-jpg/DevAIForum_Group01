@@ -62,6 +62,7 @@
         { path: '/admin/posts', label: 'Bài viết', icon: Icons.fileText(18), render: renderPosts },
         { path: '/admin/comments', label: 'Bình luận', icon: Icons.messageCircle(18), render: renderComments },
         { path: '/admin/reports', label: 'Báo cáo vi phạm', icon: Icons.flag(18), render: renderReports },
+        { path: '/admin/appeals', label: 'Kháng cáo', icon: Icons.alertTriangle(18), render: renderAppeals },
         { path: '/admin/taxonomy', label: 'Danh mục & Thẻ', icon: Icons.tag(18), render: renderTaxonomy },
     ];
 
@@ -468,6 +469,71 @@
                     await apiCall(`/api/admin/reports/${btn.getAttribute('data-report-reject')}`, 'PATCH', { status: 'rejected', note: 'Báo cáo không hợp lệ.' });
                     showToast('Đã bác bỏ báo cáo.', 'info');
                     loadReports();
+                } catch (err) {
+                    showToast(err.message, 'error');
+                }
+            });
+        });
+    }
+
+    // --- Appeals ---
+
+    async function renderAppeals(main) {
+        main.innerHTML = `
+            <div class="admin-header"><div><h1>Kháng cáo</h1><p>Kháng cáo từ tác giả các bài viết đã bị kiểm duyệt viên ẩn.</p></div></div>
+            <div class="admin-panel" id="admin-appeals-panel"><div class="admin-loading">Đang tải...</div></div>
+        `;
+        await loadAppeals();
+    }
+
+    async function loadAppeals() {
+        const panel = document.getElementById('admin-appeals-panel');
+        const res = await apiCall('/api/admin/appeals?status=pending');
+        const appeals = res?.data || [];
+        if (appeals.length === 0) {
+            panel.innerHTML = '<div class="admin-empty">Không có kháng cáo nào đang chờ xử lý.</div>';
+            return;
+        }
+        panel.innerHTML = appeals.map(a => `
+            <div style="padding:14px 0;border-bottom:1px solid var(--admin-border);">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;">
+                    <div>
+                        <strong>Bài viết #${a.post_id}: ${escapeHtml(a.post_title || '')}</strong>
+                        <div style="color:var(--admin-text-muted);font-size:12px;margin-top:2px;">Tác giả: u/${escapeHtml(a.user_username)} (${escapeHtml(a.user_display_name || '')})</div>
+                        <div style="color:var(--admin-text-muted);font-size:12px;margin-top:6px;"><strong>Lý do bị ẩn:</strong> ${escapeHtml(a.hidden_reason || 'Không có ghi chú.')}</div>
+                        <div style="font-size:13px;margin-top:8px;padding:8px 10px;background:var(--admin-surface-alt, rgba(255,255,255,0.04));border-radius:6px;"><strong>Lý do kháng cáo:</strong> ${escapeHtml(a.reason)}</div>
+                    </div>
+                    <div style="display:flex;gap:6px;flex-shrink:0;">
+                        <button class="admin-btn admin-btn-success" data-appeal-approve="${a.id}">Duyệt</button>
+                        <button class="admin-btn admin-btn-danger" data-appeal-reject="${a.id}">Từ chối</button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+        panel.querySelectorAll('[data-appeal-approve]').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                if (!window.confirm('Duyệt kháng cáo này? Bài viết sẽ được khôi phục ngay lập tức.')) return;
+                try {
+                    await apiCall(`/api/admin/appeals/${btn.getAttribute('data-appeal-approve')}`, 'PATCH', { status: 'approved' });
+                    showToast('Đã duyệt kháng cáo, bài viết đã được khôi phục.', 'success');
+                    loadAppeals();
+                } catch (err) {
+                    showToast(err.message, 'error');
+                }
+            });
+        });
+        panel.querySelectorAll('[data-appeal-reject]').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const reason = window.prompt('Nhập lý do từ chối kháng cáo. Lý do này sẽ được thông báo cho tác giả:');
+                if (reason === null) return;
+                if (!reason.trim()) {
+                    showToast('Vui lòng nhập lý do từ chối.', 'error');
+                    return;
+                }
+                try {
+                    await apiCall(`/api/admin/appeals/${btn.getAttribute('data-appeal-reject')}`, 'PATCH', { status: 'rejected', reason: reason.trim() });
+                    showToast('Đã từ chối kháng cáo.', 'info');
+                    loadAppeals();
                 } catch (err) {
                     showToast(err.message, 'error');
                 }

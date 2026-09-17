@@ -401,3 +401,45 @@ DEALLOCATE PREPARE best_answer_stmt;
 
 -- Keep the audit action extensible when this schema upgrades an existing database.
 ALTER TABLE moderation_logs MODIFY action VARCHAR(40) NOT NULL;
+
+-- Store the moderator's reason directly on the post so the author can see why it was hidden.
+SET @hidden_reason_exists = (
+    SELECT COUNT(*)
+    FROM information_schema.COLUMNS
+    WHERE TABLE_SCHEMA = DATABASE()
+      AND TABLE_NAME = 'posts'
+      AND COLUMN_NAME = 'hidden_reason'
+);
+SET @hidden_reason_sql = IF(
+    @hidden_reason_exists = 0,
+    'ALTER TABLE posts ADD COLUMN hidden_reason VARCHAR(2000) NULL AFTER status',
+    'SELECT 1'
+);
+PREPARE hidden_reason_stmt FROM @hidden_reason_sql;
+EXECUTE hidden_reason_stmt;
+DEALLOCATE PREPARE hidden_reason_stmt;
+
+CREATE TABLE IF NOT EXISTS post_appeals (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    post_id BIGINT UNSIGNED NOT NULL,
+    user_id BIGINT UNSIGNED NOT NULL,
+    reason VARCHAR(2000) NOT NULL,
+    status ENUM('pending', 'approved', 'rejected') NOT NULL DEFAULT 'pending',
+    admin_id BIGINT UNSIGNED NULL,
+    admin_reason VARCHAR(2000) NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    handled_at DATETIME NULL,
+    KEY idx_post_appeals_queue (status, created_at),
+    KEY idx_post_appeals_post (post_id),
+    KEY idx_post_appeals_user (user_id),
+    KEY idx_post_appeals_admin (admin_id),
+    CONSTRAINT fk_post_appeals_post
+        FOREIGN KEY (post_id) REFERENCES posts(id)
+        ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT fk_post_appeals_user
+        FOREIGN KEY (user_id) REFERENCES users(id)
+        ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT fk_post_appeals_admin
+        FOREIGN KEY (admin_id) REFERENCES users(id)
+        ON UPDATE CASCADE ON DELETE SET NULL
+) ENGINE=InnoDB;
