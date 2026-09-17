@@ -35,6 +35,14 @@ WHERE moderator_id IN (SELECT id FROM users WHERE email LIKE '%@devai.local')
        WHERE author_id IN (SELECT id FROM users WHERE email LIKE '%@devai.local')
    );
 
+DELETE FROM post_appeals
+WHERE user_id IN (SELECT id FROM users WHERE email LIKE '%@devai.local')
+   OR admin_id IN (SELECT id FROM users WHERE email LIKE '%@devai.local')
+   OR post_id IN (
+       SELECT id FROM posts
+       WHERE author_id IN (SELECT id FROM users WHERE email LIKE '%@devai.local')
+   );
+
 DELETE FROM post_likes
 WHERE user_id IN (SELECT id FROM users WHERE email LIKE '%@devai.local')
    OR post_id IN (
@@ -126,7 +134,7 @@ INSERT INTO users (
     reputation, status, banned_reason, created_at
 )
 SELECT id, 'quang_phuc', 'quang.phuc@devai.local', @demo_password,
-       'Quang Phúc', 'Frontend developer sử dụng JavaScript và Bootstrap.', 250,
+       'Quang Phúc', 'Frontend developer sử dụng JavaScript và Bootstrap.', 245,
        'active', NULL, CURRENT_TIMESTAMP - INTERVAL 35 DAY
 FROM roles WHERE name = 'member';
 
@@ -135,7 +143,7 @@ INSERT INTO users (
     reputation, status, banned_reason, created_at
 )
 SELECT id, 'lan_anh', 'lan.anh@devai.local', @demo_password,
-       'Lan Anh', 'Sinh viên tìm kiếm tài nguyên học tập và cơ hội thực tập.', 190,
+       'Lan Anh', 'Sinh viên tìm kiếm tài nguyên học tập và cơ hội thực tập.', 185,
        'active', NULL, CURRENT_TIMESTAMP - INTERVAL 25 DAY
 FROM roles WHERE name = 'member';
 
@@ -240,7 +248,24 @@ INSERT INTO posts (
  'Bản nháp: thử nghiệm RAG cho tài liệu nội bộ',
  'ban-nhap-thu-nghiem-rag-tai-lieu-noi-bo',
  '<p>Nội dung bản nháp chưa công khai.</p>',
- 'discussion', 'draft', 0, 0, 0, CURRENT_TIMESTAMP);
+ 'discussion', 'draft', 0, 0, 0, CURRENT_TIMESTAMP),
+
+(@phuc_id, @cat_basic,
+ 'Chia sẻ template CV cho lập trình viên mới ra trường',
+ 'chia-se-template-cv-lap-trinh-vien-moi-ra-truong',
+ '<p>Mình chia sẻ một số mẫu CV kèm liên kết tải về, hy vọng giúp ích cho các bạn mới ra trường.</p>',
+ 'resource', 'hidden', 0, 0, 54, CURRENT_TIMESTAMP - INTERVAL 4 DAY),
+
+(@lan_id, @cat_resource,
+ 'Tổng hợp link tải slide bài giảng AI học kỳ này',
+ 'tong-hop-link-tai-slide-bai-giang-ai-hoc-ky-nay',
+ '<p>Mình tổng hợp lại các link slide bài giảng để mọi người tiện ôn tập.</p>',
+ 'resource', 'hidden', 0, 0, 88, CURRENT_TIMESTAMP - INTERVAL 6 DAY);
+
+UPDATE posts SET hidden_reason = 'Bài viết chứa liên kết tải xuống chưa được kiểm chứng, có nguy cơ vi phạm bản quyền.'
+WHERE slug = 'chia-se-template-cv-lap-trinh-vien-moi-ra-truong';
+UPDATE posts SET hidden_reason = 'Nội dung trùng lặp với tài nguyên đã được BQT ghim trước đó.'
+WHERE slug = 'tong-hop-link-tai-slide-bai-giang-ai-hoc-ky-nay';
 
 SELECT id INTO @p1 FROM posts WHERE slug = 'loi-ket-noi-mysql-php-pdo-xampp';
 SELECT id INTO @p2 FROM posts WHERE slug = 'so-sanh-gemini-api-openai-api-chatbot-tieng-viet';
@@ -253,6 +278,8 @@ SELECT id INTO @p8 FROM posts WHERE slug = 'fetch-api-json-giao-dien-khong-cap-n
 SELECT id INTO @p9 FROM posts WHERE slug = 'huong-dan-php-mvc-thuan-xampp';
 SELECT id INTO @p10 FROM posts WHERE slug = 'kinh-nghiem-chuan-bi-cv-thuc-tap-ai';
 SELECT id INTO @p11 FROM posts WHERE slug = 'loi-thuong-gap-import-database-phpmyadmin';
+SELECT id INTO @p_hidden1 FROM posts WHERE slug = 'chia-se-template-cv-lap-trinh-vien-moi-ra-truong';
+SELECT id INTO @p_hidden2 FROM posts WHERE slug = 'tong-hop-link-tai-slide-bai-giang-ai-hoc-ky-nay';
 
 -- Technology tags.
 INSERT INTO post_tags (post_id, tag_id)
@@ -368,7 +395,21 @@ INSERT INTO notifications (
 (@mod_id, @an_id, @p1, @p1_best, 'best_answer', 'Câu trả lời của bạn đã được chọn là câu trả lời hay nhất.', 1, CURRENT_TIMESTAMP - INTERVAL 9 DAY, CURRENT_TIMESTAMP - INTERVAL 10 DAY),
 (@linh_id, @phuc_id, @p7, NULL, 'like', 'Quang Phúc đã thích bài viết của bạn.', 0, NULL, CURRENT_TIMESTAMP - INTERVAL 2 DAY),
 (@mod_id, @lan_id, @p9, NULL, 'comment', 'Lan Anh đã bình luận về bài viết của bạn.', 0, NULL, CURRENT_TIMESTAMP - INTERVAL 1 DAY),
-(@lan_id, @hai_id, @p10, NULL, 'comment', 'Hải Lê đã bình luận về bài viết của bạn.', 0, NULL, CURRENT_TIMESTAMP);
+(@lan_id, @hai_id, @p10, NULL, 'comment', 'Hải Lê đã bình luận về bài viết của bạn.', 0, NULL, CURRENT_TIMESTAMP),
+(@phuc_id, @mod_id, @p_hidden1, NULL, 'moderation', 'Bài viết "Chia sẻ template CV cho lập trình viên mới ra trường" của bạn đã bị Moderator hủy. Lý do: Bài viết chứa liên kết tải xuống chưa được kiểm chứng, có nguy cơ vi phạm bản quyền.', 0, NULL, CURRENT_TIMESTAMP - INTERVAL 4 DAY),
+(@lan_id, @admin_id, @p_hidden2, NULL, 'moderation', 'Bài viết "Tổng hợp link tải slide bài giảng AI học kỳ này" của bạn đã bị Moderator hủy. Lý do: Nội dung trùng lặp với tài nguyên đã được BQT ghim trước đó.', 1, CURRENT_TIMESTAMP - INTERVAL 5 DAY, CURRENT_TIMESTAMP - INTERVAL 6 DAY),
+(@lan_id, @admin_id, @p_hidden2, NULL, 'moderation', 'Kháng cáo cho bài viết "Tổng hợp link tải slide bài giảng AI học kỳ này" đã bị từ chối. Lý do: Nội dung vẫn trùng lặp phần lớn với tài nguyên đã ghim, cần bổ sung góc nhìn riêng trước khi đăng lại.', 0, NULL, CURRENT_TIMESTAMP - INTERVAL 2 DAY);
+
+-- Post appeals: one still pending review, one already rejected by admin.
+INSERT INTO post_appeals (post_id, user_id, reason, status, admin_id, admin_reason, created_at, handled_at) VALUES
+(@p_hidden1, @phuc_id,
+ 'Các liên kết mình chia sẻ đều là tài liệu do chính mình biên soạn, không vi phạm bản quyền. Mong BQT xem xét lại.',
+ 'pending', NULL, NULL, CURRENT_TIMESTAMP - INTERVAL 1 DAY, NULL),
+(@p_hidden2, @lan_id,
+ 'Mình chỉ tổng hợp lại link công khai từ giảng viên, không phải nội dung trùng lặp hoàn toàn với bài đã ghim.',
+ 'rejected', @admin_id,
+ 'Nội dung vẫn trùng lặp phần lớn với tài nguyên đã ghim, cần bổ sung góc nhìn riêng trước khi đăng lại.',
+ CURRENT_TIMESTAMP - INTERVAL 3 DAY, CURRENT_TIMESTAMP - INTERVAL 2 DAY);
 
 -- Moderation queue and audit history.
 INSERT INTO reports (
@@ -386,6 +427,9 @@ INSERT INTO moderation_logs (
 (@admin_id, @spammer_id, NULL, NULL, 'ban_user', 'Đăng nội dung quảng cáo lặp lại.', CURRENT_TIMESTAMP - INTERVAL 5 DAY),
 (@mod_id, NULL, @p2, NULL, 'pin_post', 'Bài thảo luận có giá trị tham khảo cao.', CURRENT_TIMESTAMP - INTERVAL 4 DAY),
 (@mod_id, NULL, @p9, NULL, 'pin_post', 'Hướng dẫn thiết lập dự án dành cho thành viên mới.', CURRENT_TIMESTAMP - INTERVAL 2 DAY),
-(@mod_id, NULL, NULL, @p1_first_comment, 'resolve_report', 'Đã xem xét, bình luận không vi phạm.', CURRENT_TIMESTAMP - INTERVAL 7 DAY);
+(@mod_id, NULL, NULL, @p1_first_comment, 'resolve_report', 'Đã xem xét, bình luận không vi phạm.', CURRENT_TIMESTAMP - INTERVAL 7 DAY),
+(@mod_id, @phuc_id, @p_hidden1, NULL, 'hide_post', 'Bài viết chứa liên kết tải xuống chưa được kiểm chứng, có nguy cơ vi phạm bản quyền.', CURRENT_TIMESTAMP - INTERVAL 4 DAY),
+(@admin_id, @lan_id, @p_hidden2, NULL, 'hide_post', 'Nội dung trùng lặp với tài nguyên đã được BQT ghim trước đó.', CURRENT_TIMESTAMP - INTERVAL 6 DAY),
+(@admin_id, @lan_id, @p_hidden2, NULL, 'reject_appeal', 'Nội dung vẫn trùng lặp phần lớn với tài nguyên đã ghim, cần bổ sung góc nhìn riêng trước khi đăng lại.', CURRENT_TIMESTAMP - INTERVAL 2 DAY);
 
 COMMIT;
