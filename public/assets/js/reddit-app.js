@@ -1478,7 +1478,7 @@
         const roleBadge = p.role_name === 'admin' ? '<span class="role-badge role-admin">Admin</span>' : (p.role_name === 'moderator' ? '<span class="role-badge role-moderator">Mod</span>' : '');
         const initial = escapeHtml((p.display_name || p.username || '?').charAt(0).toUpperCase());
         const avatarHtml = p.avatar_path
-            ? `<img src="${escapeHtml(p.avatar_path)}" alt="${escapeHtml(p.username)}" class="profile-page-avatar-img">`
+            ? `<img src="${config.baseUrl}${escapeHtml(p.avatar_path)}" alt="${escapeHtml(p.username)}" class="profile-page-avatar-img">`
             : `<div class="profile-page-avatar-fallback">${initial}</div>`;
 
         const tabs = [
@@ -1684,7 +1684,7 @@
             const roleBadge = p.role_name === 'admin' ? '<span class="role-badge role-admin">Admin</span>' : (p.role_name === 'moderator' ? '<span class="role-badge role-moderator">Mod</span>' : '');
             const initial = escapeHtml((p.display_name || p.username || '?').charAt(0).toUpperCase());
             const avatarHtml = p.avatar_path
-                ? `<img src="${escapeHtml(p.avatar_path)}" class="user-hover-card-avatar-img" alt="${escapeHtml(p.username)}">`
+                ? `<img src="${config.baseUrl}${escapeHtml(p.avatar_path)}" class="user-hover-card-avatar-img" alt="${escapeHtml(p.username)}">`
                 : `<div class="user-hover-card-avatar-fallback">${initial}</div>`;
 
             root.innerHTML = `
