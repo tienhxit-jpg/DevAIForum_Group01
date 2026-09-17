@@ -146,8 +146,10 @@ final class Admin extends Model
             }
             $this->execute("UPDATE posts SET {$updates[$action]} WHERE id = :id", ['id' => $postId]);
             if ($action === 'hide_post') {
+                $this->execute('UPDATE posts SET hidden_reason = :reason WHERE id = :id', ['reason' => $reason, 'id' => $postId]);
                 $this->execute('UPDATE users SET reputation = reputation - 5 WHERE id = :author_id', ['author_id' => (int) $post['author_id']]);
             } elseif ($action === 'restore_post') {
+                $this->execute("UPDATE posts SET hidden_reason = NULL WHERE id = :id", ['id' => $postId]);
                 $this->execute('UPDATE users SET reputation = reputation + 5 WHERE id = :author_id', ['author_id' => (int) $post['author_id']]);
             }
             $this->log($moderatorId, $action, $reason !== '' ? $reason : null, null, $postId);

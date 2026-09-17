@@ -174,7 +174,7 @@ try {
     $homeRes = $request('GET', '/');
     $postWebRes = $request('GET', '/posts/1');
     $cssRes = $request('GET', '/assets/css/reddit-theme.css');
-    $jsRes = $request('GET', '/assets/js/reddit-app.js');
+    $jsRes = $request('GET', '/assets/js/devai-app.js');
 
     $test->test('11. Frontend SPA routes and static assets delivery', function () use ($test, $homeRes, $postWebRes, $cssRes, $jsRes): void {
         $test->assertSame(200, $homeRes['status']);

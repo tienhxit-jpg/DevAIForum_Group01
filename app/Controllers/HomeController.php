@@ -29,7 +29,7 @@ final class HomeController extends Controller
 
         $csrfToken = Csrf::token();
         $cssVer = @filemtime(dirname(__DIR__, 2) . '/public/assets/css/reddit-theme.css') ?: time();
-        $jsVer = @filemtime(dirname(__DIR__, 2) . '/public/assets/js/reddit-app.js') ?: time();
+        $jsVer = @filemtime(dirname(__DIR__, 2) . '/public/assets/js/devai-app.js') ?: time();
 
         $html = <<<HTML
 <!DOCTYPE html>
@@ -55,7 +55,7 @@ final class HomeController extends Controller
     <div id="toast-container" class="toast-container" aria-live="polite"></div>
 
     <script src="{$baseUrl}/assets/js/icons.js"></script>
-    <script src="{$baseUrl}/assets/js/reddit-app.js?v={$jsVer}" defer></script>
+    <script src="{$baseUrl}/assets/js/devai-app.js?v={$jsVer}" defer></script>
 </body>
 </html>
 HTML;

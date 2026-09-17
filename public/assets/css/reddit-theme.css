@@ -1070,6 +1070,31 @@ img {
 }
 
 /* Best Answer Banner */
+.hidden-post-banner {
+    background: rgba(239, 68, 68, 0.08);
+    border: 1.5px solid var(--color-danger);
+    border-radius: var(--radius-lg);
+    padding: 14px 18px;
+    margin-bottom: 16px;
+}
+
+.appeal-status-badge {
+    margin-top: 8px;
+    font-size: 13px;
+    padding: 8px 10px;
+    border-radius: var(--radius-md);
+}
+
+.appeal-status-pending {
+    background: rgba(245, 158, 11, 0.12);
+    color: #F59E0B;
+}
+
+.appeal-status-rejected {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--color-danger);
+}
+
 .best-answer-banner {
     background: rgba(16, 185, 129, 0.08);
     border: 1.5px solid #10B981;

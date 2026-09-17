@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Controllers\AdminController;
+use App\Controllers\AppealController;
 use App\Controllers\AuthController;
 use App\Controllers\CommentController;
 use App\Controllers\HomeController;
@@ -27,6 +28,7 @@ $router->get('/admin/posts', [AdminController::class, 'panel']);
 $router->get('/admin/comments', [AdminController::class, 'panel']);
 $router->get('/admin/reports', [AdminController::class, 'panel']);
 $router->get('/admin/taxonomy', [AdminController::class, 'panel']);
+$router->get('/admin/appeals', [AdminController::class, 'panel']);
 
 $router->get('/api/csrf', [AuthController::class, 'csrf']);
 $router->post('/api/auth/register', [AuthController::class, 'register']);
@@ -42,6 +44,7 @@ $router->post('/api/posts', [PostController::class, 'create']);
 $router->put('/api/posts/{id}', [PostController::class, 'update']);
 $router->delete('/api/posts/{id}', [PostController::class, 'delete']);
 $router->post('/api/posts/{id}/best-answer', [PostController::class, 'bestAnswer']);
+$router->post('/api/posts/{id}/appeal', [PostController::class, 'appeal']);
 $router->post('/api/posts/{id}/comments', [CommentController::class, 'create']);
 $router->put('/api/comments/{id}', [CommentController::class, 'update']);
 $router->delete('/api/comments/{id}', [CommentController::class, 'delete']);
@@ -83,6 +86,8 @@ $router->patch('/api/admin/comments/{id}/moderate', [AdminController::class, 'mo
 $router->delete('/api/admin/posts/{id}/permanent', [AdminController::class, 'hardDeletePost']);
 $router->get('/api/admin/reports', [ReportController::class, 'queue']);
 $router->patch('/api/admin/reports/{id}', [ReportController::class, 'resolve']);
+$router->get('/api/admin/appeals', [AppealController::class, 'queue']);
+$router->patch('/api/admin/appeals/{id}', [AppealController::class, 'decide']);
 $router->post('/api/admin/categories', [TaxonomyController::class, 'saveCategory']);
 $router->put('/api/admin/categories/{id}', [TaxonomyController::class, 'saveCategory']);
 $router->delete('/api/admin/categories/{id}', [TaxonomyController::class, 'deleteCategory']);

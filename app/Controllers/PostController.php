@@ -11,6 +11,7 @@ use App\Core\Response;
 use App\Models\Comment;
 use App\Models\Notification;
 use App\Models\Post;
+use App\Models\PostAppeal;
 use App\Helpers\Upload;
 
 final class PostController extends Controller
@@ -32,12 +33,27 @@ final class PostController extends Controller
     {
         $post = new Post();
         $post->incrementViews((int) $id);
-        $detail = $post->findDetailed((int) $id, Auth::id());
-        if ($detail === null || ($detail['status'] === 'hidden' && !Auth::can('post.moderate'))) {
+        $viewerId = Auth::id();
+        $detail = $post->findDetailed((int) $id, $viewerId);
+        $isOwner = $detail !== null && $viewerId !== null && (int) $detail['author_id'] === $viewerId;
+        if ($detail === null || ($detail['status'] === 'hidden' && !$isOwner && !Auth::can('post.moderate'))) {
             Response::json(['error' => 'Bài viết không tồn tại.'], 404);
         }
-        $detail['comments'] = (new Comment())->listByPost((int) $id, Auth::id());
+        if ($detail['status'] === 'hidden' && $isOwner) {
+            $detail['appeal'] = (new PostAppeal())->latestForPost((int) $id);
+        }
+        $detail['comments'] = (new Comment())->listByPost((int) $id, $viewerId);
         Response::json(['data' => $detail]);
+    }
+
+    public function appeal(Request $request, string $id): never
+    {
+        $userId = $this->member($request, 'post.appeal');
+        $data = $this->requireValid($request, ['reason' => ['required', 'min:20', 'max:2000']]);
+        $this->action(function () use ($id, $userId, $data): array {
+            $appealId = (new PostAppeal())->create((int) $id, $userId, (string) $data['reason']);
+            return ['message' => 'Đã gửi kháng cáo. Quản trị viên sẽ xem xét sớm nhất.', 'id' => $appealId];
+        });
     }
 
     public function create(Request $request): never
