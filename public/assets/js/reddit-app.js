@@ -433,6 +433,9 @@
         const container = document.getElementById('nav-right-area');
         if (!container) return;
 
+        const wasNotifDropdownOpen = document.getElementById('notifications-dropdown')?.classList.contains('active');
+        const wasUserMenuOpen = document.getElementById('user-menu-dropdown')?.classList.contains('active');
+
         const isDark = state.theme === 'dark';
         const themeToggleBtn = `
             <button class="btn-icon" id="btn-theme-toggle" title="Chuyển chế độ ${isDark ? 'sáng' : 'tối'}" aria-label="Chuyển giao diện">
@@ -515,6 +518,14 @@
                     </div>
                 </div>
             `;
+
+            if (wasNotifDropdownOpen) {
+                document.getElementById('notifications-dropdown')?.classList.add('active');
+                renderNotificationsDropdown();
+            }
+            if (wasUserMenuOpen) {
+                document.getElementById('user-menu-dropdown')?.classList.add('active');
+            }
         } else {
             container.innerHTML = `
                 <div style="display: flex; gap: 4px; margin-right: 4px;">
@@ -3136,7 +3147,7 @@
             </div>
             <div style="max-height: 280px; overflow-y: auto;">
                 ${state.notifications.map(n => `
-                    <div style="padding: 8px 12px; border-bottom: 1px solid var(--border-subtle); font-size: 12.5px; ${n.is_read ? 'opacity: 0.7;' : 'background: var(--surface-selected);'}" data-notif-id="${n.id}">
+                    <div class="notif-item" style="padding: 8px 12px; border-bottom: 1px solid var(--border-subtle); font-size: 12.5px; cursor: pointer; ${n.is_read ? 'opacity: 0.7;' : 'background: var(--surface-selected);'}" data-notif-id="${n.id}" data-post-id="${n.post_id || ''}">
                         <div>${escapeHtml(n.message)}</div>
                         <div style="font-size: 10.5px; color: var(--text-muted); margin-top: 2px;">${timeAgo(n.created_at)}</div>
                     </div>
@@ -3154,6 +3165,28 @@
             } catch (err) {
                 showToast(err.message, 'error');
             }
+        });
+
+        dropdown.querySelectorAll('.notif-item').forEach(item => {
+            item.addEventListener('click', async () => {
+                const notifId = parseInt(item.getAttribute('data-notif-id'), 10);
+                const postId = item.getAttribute('data-post-id');
+                const notif = state.notifications.find(n => n.id === notifId);
+                if (notif && !notif.is_read) {
+                    try {
+                        await apiCall(`/api/notifications/${notifId}/read`, 'PATCH');
+                        notif.is_read = 1;
+                        state.unreadNotificationsCount = Math.max(0, state.unreadNotificationsCount - 1);
+                        updateNavUserArea();
+                    } catch (err) {
+                        // silent fail, still navigate
+                    }
+                }
+                document.getElementById('notifications-dropdown')?.classList.remove('active');
+                if (postId) {
+                    openPostDetail(postId);
+                }
+            });
         });
     }
 

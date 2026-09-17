@@ -403,6 +403,7 @@ img {
     top: calc(100% + 6px);
     right: 0;
     width: 230px;
+    max-width: calc(100vw - 24px);
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
@@ -2042,6 +2043,41 @@ img {
     }
     .review-row-actions {
         justify-content: flex-start;
+    }
+}
+
+@media (max-width: 480px) {
+    .top-nav {
+        padding: 0 8px;
+        gap: 8px;
+    }
+    .logo-text span {
+        display: none;
+    }
+    .nav-search {
+        max-width: none;
+    }
+    .nav-right {
+        gap: 4px;
+    }
+    #btn-create-post-top span {
+        display: none;
+    }
+    #btn-create-post-top {
+        padding: 6px 10px;
+    }
+    .user-info-text {
+        display: none;
+    }
+    .user-pill {
+        padding: 4px;
+    }
+    .app-container {
+        padding: 6px;
+    }
+    .left-rail.mobile-drawer-open {
+        width: 85vw;
+        max-width: 280px;
     }
 }
 
