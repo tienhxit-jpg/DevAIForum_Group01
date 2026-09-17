@@ -346,8 +346,9 @@
             console.error('Failed to load taxonomies:', e);
         }
 
-        // Check if current URL is a post detail route (e.g. /posts/123 or ?post=123)
+        // Check if current URL is a post detail / user profile route (e.g. /posts/123, /u/username, ?post=123)
         const pathMatches = window.location.pathname.match(/\/posts\/(\d+)/);
+        const userPathMatches = window.location.pathname.match(/\/u\/([^/]+)/);
         const urlParams = new URLSearchParams(window.location.search);
         const urlPostId = pathMatches ? pathMatches[1] : urlParams.get('post');
 
@@ -355,6 +356,8 @@
             await openModerationCenter(false);
         } else if (urlPostId) {
             await openPostDetail(parseInt(urlPostId, 10), false);
+        } else if (userPathMatches) {
+            await openUserProfilePage(decodeURIComponent(userPathMatches[1]), false);
         } else {
             await loadFeed(1);
         }
@@ -2250,10 +2253,13 @@
         // Browser back/forward navigation
         window.addEventListener('popstate', (e) => {
             const pathMatches = window.location.pathname.match(/\/posts\/(\d+)/);
+            const userPathMatches = window.location.pathname.match(/\/u\/([^/]+)/);
             if (window.location.pathname.endsWith('/moderation') && canAccessModerationCenter()) {
                 openModerationCenter(false);
             } else if (pathMatches) {
                 openPostDetail(parseInt(pathMatches[1], 10), false);
+            } else if (userPathMatches) {
+                openUserProfilePage(decodeURIComponent(userPathMatches[1]), false);
             } else {
                 state.activeView = 'feed';
                 loadFeed(1);
